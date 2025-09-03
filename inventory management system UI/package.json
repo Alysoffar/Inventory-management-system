@@ -1,0 +1,41 @@
+{
+    "name": "inventory-management-system",
+    "version": "2.0.0",
+    "description": "Smart Inventory Management System with automated restock and GPS tracking",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "watch": "vite build --watch",
+        "hot": "vite --host",
+        "production": "cross-env NODE_ENV=production npm run build"
+    },
+    "keywords": [
+        "laravel",
+        "inventory",
+        "management",
+        "php",
+        "bootstrap",
+        "mysql",
+        "automation"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+        "@vitejs/plugin-laravel": "^0.7.5",
+        "axios": "^1.1.2",
+        "bootstrap": "^5.2.2",
+        "cross-env": "^7.0.3",
+        "laravel-vite-plugin": "^0.7.2",
+        "postcss": "^8.4.18",
+        "sass": "^1.56.1",
+        "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.6",
+        "leaflet": "^1.9.2",
+        "chart.js": "^4.0.1",
+        "sweetalert2": "^11.6.2",
+        "font-awesome": "^4.7.0"
+    }
+}
