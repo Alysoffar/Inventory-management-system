@@ -1,4 +1,5 @@
-# LSTM Inventory Forecasting - .gitignore
+# Complete Inventory Management & Forecasting System - .gitignore
+# This file covers both the AI engine and Laravel web interface
 
 # ========================
 # SENSITIVE DATA & DATASETS
@@ -20,7 +21,45 @@ training_results.json
 performance_metrics.json
 
 # ========================
-# MACHINE LEARNING MODELS
+# LARAVEL WEB INTERFACE
+# ========================
+# Laravel specific (inventory management system UI/)
+inventory\ management\ system\ UI/.env
+inventory\ management\ system\ UI/.env.*
+!inventory\ management\ system\ UI/.env.example
+
+# Laravel dependencies
+inventory\ management\ system\ UI/vendor/
+inventory\ management\ system\ UI/node_modules/
+
+# Laravel storage
+inventory\ management\ system\ UI/storage/*.key
+inventory\ management\ system\ UI/storage/app/*
+inventory\ management\ system\ UI/storage/framework/cache/*
+inventory\ management\ system\ UI/storage/framework/sessions/*
+inventory\ management\ system\ UI/storage/framework/views/*
+inventory\ management\ system\ UI/storage/logs/*
+!inventory\ management\ system\ UI/storage/app/.gitkeep
+!inventory\ management\ system\ UI/storage/app/public/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/cache/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/sessions/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/views/.gitkeep
+!inventory\ management\ system\ UI/storage/logs/.gitkeep
+
+# Laravel compiled assets
+inventory\ management\ system\ UI/public/hot
+inventory\ management\ system\ UI/public/storage
+inventory\ management\ system\ UI/public/css/app.css
+inventory\ management\ system\ UI/public/js/app.js
+inventory\ management\ system\ UI/public/mix-manifest.json
+
+# Composer
+inventory\ management\ system\ UI/composer.lock
+
+# ========================
+# MACHINE LEARNING MODELS  
+# ========================
 # ========================
 # Large model files should not be in git (use Git LFS or cloud storage)
 models/
