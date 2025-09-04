@@ -9,6 +9,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\AIPredictionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,21 @@ Route::prefix('reports')->name('reports.')->group(function () {
     Route::get('/export/inventory-pdf', [ReportController::class, 'exportInventoryPdf'])->name('export.inventory-pdf');
 });
 
+// AI Prediction Routes
+Route::prefix('ai')->name('ai.')->group(function () {
+    // Prediction Dashboard
+    Route::get('/predictions', [AIPredictionController::class, 'index'])->name('predictions.index');
+    Route::get('/predictions/create', [AIPredictionController::class, 'create'])->name('predictions.create');
+    Route::post('/predict', [AIPredictionController::class, 'predict'])->name('predict');
+    Route::post('/bulk-predict', [AIPredictionController::class, 'bulkPredict'])->name('bulk-predict');
+    
+    // AI Insights and Analytics
+    Route::get('/insights', [AIPredictionController::class, 'insights'])->name('insights');
+    
+    // API endpoints for AI services
+    Route::get('/health', [AIPredictionController::class, 'healthCheck'])->name('health');
+});
+
 // API Routes for AJAX calls
 Route::prefix('api')->name('api.')->group(function () {
     Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
@@ -78,4 +94,7 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/suppliers/search', [SupplierController::class, 'search'])->name('suppliers.search');
     Route::get('/products/{product}/stock', [ProductController::class, 'getStock'])->name('products.stock');
     Route::get('/products/map-data', [ProductController::class, 'mapData'])->name('products.map-data');
+    
+    // AI API endpoints
+    Route::get('/ai/health', [AIPredictionController::class, 'healthCheck'])->name('ai.health');
 });

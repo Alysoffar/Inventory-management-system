@@ -12,14 +12,48 @@ class SaleController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Sale::with(['product', 'customer']);
+        // Build the query with relationships
+        $query = Sale::with(['customer']);
+        
+        // Apply filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        if ($request->filled('customer')) {
+            $query->where('customer_id', $request->customer);
+        }
+        
+        // Search functionality
         if ($request->has('search')) {
             $search = $request->get('search');
-            $query->whereHas('product', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
-                  ->orWhereHas('customer', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
+            $query->whereHas('customer', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
         }
+        
+        // Get paginated sales
         $sales = $query->orderBy('created_at', 'desc')->paginate(10);
-        return view('sales.index', compact('sales'));
+        
+        // Calculate statistics
+        $totalSales = Sale::count();
+        $totalRevenue = Sale::sum('total_amount') ?? 0;
+        $todaySales = Sale::whereDate('created_at', today())->count();
+        $averageSale = $totalSales > 0 ? $totalRevenue / $totalSales : 0;
+        
+        // Get customers for filter dropdown
+        $customers = Customer::orderBy('name')->get();
+        
+        return view('sales.index', compact(
+            'sales', 
+            'totalSales', 
+            'totalRevenue', 
+            'todaySales', 
+            'averageSale',
+            'customers'
+        ));
     }
 
     public function create()

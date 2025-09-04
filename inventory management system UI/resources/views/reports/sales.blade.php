@@ -6,7 +6,7 @@
 <div class="row mb-4">
     <div class="col-md-6"><h2><i class="fas fa-chart-bar me-2"></i>Sales Reports</h2></div>
     <div class="col-md-6 text-end">
-        <a href="{{ route('reports.sales.pdf', request()->all()) }}" class="btn btn-success"><i class="fas fa-file-pdf me-1"></i>Export PDF</a>
+        <button type="button" class="btn btn-success" onclick="exportReport()"><i class="fas fa-file-pdf me-1"></i>Export PDF</button>
     </div>
 </div>
 
@@ -64,4 +64,13 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+function exportReport() {
+    // Placeholder for export functionality
+    alert('Export functionality will be implemented soon. This will generate a PDF report of the sales data.');
+}
+</script>
+@endpush
 @endsection

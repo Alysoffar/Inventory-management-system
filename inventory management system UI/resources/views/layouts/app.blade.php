@@ -24,6 +24,10 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            font-size: 0.75rem;
+            line-height: 1.2;
         }
         
         .sidebar { 
@@ -31,73 +35,207 @@
             min-height: 100vh; 
             color: white;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60px;
+            z-index: 1000;
+            transition: width 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .sidebar:hover {
+            width: 200px;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+        }
+        
+        .sidebar .p-3 {
+            padding: 0.5rem 0.5rem !important;
+        }
+        
+        .sidebar h4 {
+            margin-bottom: 1rem !important;
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+        }
+        
+        .sidebar:hover h4 {
+            opacity: 1;
+        }
+        
+        /* Tooltip for collapsed sidebar */
+        .sidebar:not(:hover) .nav-link {
+            position: relative;
+        }
+        
+        .sidebar:not(:hover) .nav-link:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            z-index: 1001;
+            pointer-events: none;
         }
         
         .nav-link { 
-            color: rgba(255,255,255,0.8) !important; 
-            padding: 12px 20px !important; 
-            border-radius: 8px; 
-            margin: 3px 0; 
+            color: rgba(255,255,255,0.85) !important; 
+            padding: 0.5rem !important; 
+            border-radius: 4px; 
+            margin: 0.1rem 0; 
             transition: all 0.3s ease;
             font-weight: 500;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .nav-link span {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+        }
+        
+        .sidebar:hover .nav-link span {
+            opacity: 1;
         }
         
         .nav-link:hover, .nav-link.active { 
             background: rgba(255,255,255,0.15) !important; 
             color: white !important;
-            transform: translateX(5px);
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .main-content {
+            margin-left: 60px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .content-wrapper {
+            padding: 0.5rem 0.75rem;
+            max-width: 100%;
         }
         
         .card { 
             border: none; 
-            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); 
-            border-radius: 15px;
+            box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.05); 
+            border-radius: 6px;
             transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
         }
         
         .card:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.08);
+            transform: translateY(-1px);
         }
         
         .card-header { 
             background: var(--primary-gradient);
             color: white; 
-            border-radius: 15px 15px 0 0 !important;
+            border-radius: 6px 6px 0 0 !important;
             font-weight: 600;
+            padding: 0.4rem 0.6rem;
+            border-bottom: none;
+            font-size: 0.75rem;
+        }
+        
+        .card-body {
+            padding: 0.5rem;
+        }
+        
+        .card-title {
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.8rem;
+        }
+        
+        .row {
+            margin-left: -0.25rem;
+            margin-right: -0.25rem;
+        }
+        
+        .row > * {
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+        }
+        
+        .btn { 
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            border: none;
+            margin: 0.1rem;
         }
         
         .btn-primary { 
             background: var(--primary-gradient);
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
         }
         
         .btn-primary:hover { 
             background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
         .btn-success {
             background: var(--success-gradient);
-            border: none;
-            border-radius: 8px;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #46a8f5 0%, #00e5f2 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         
         .btn-warning {
             background: var(--warning-gradient);
-            border: none;
-            border-radius: 8px;
             color: white;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #40e070 0%, #35f5d0 100%);
+            color: white;
+            transform: translateY(-1px);
         }
         
         .btn-danger {
             background: var(--secondary-gradient);
-            border: none;
-            border-radius: 8px;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #f085f5 0%, #f54865 100%);
+            transform: translateY(-1px);
+        }
+        
+        .btn-group {
+            margin: 0.5rem 0;
+        }
+        
+        .btn-group .btn {
+            margin: 0;
         }
         
         .alert { 
@@ -129,7 +267,99 @@
         .stats-card { 
             background: var(--primary-gradient);
             color: white; 
-            border-radius: 15px;
+            border-radius: 6px;
+        }
+        
+        .stats-card .card-body {
+            padding: 0.5rem 0.4rem;
+        }
+        
+        .stats-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.15rem;
+        }
+        
+        .stats-card p {
+            font-size: 0.65rem;
+            margin-bottom: 0;
+        }
+        
+        .stats-card i {
+            font-size: 1rem !important;
+            margin-bottom: 0.3rem !important;
+        }
+        
+        /* Ultra-compact dashboard styles */
+        .content-wrapper {
+            padding: 0.5rem 0.75rem;
+            max-width: 100%;
+        }
+        
+        .g-1 > * {
+            padding: 0.125rem;
+        }
+        
+        .row.g-1 {
+            margin-left: -0.125rem;
+            margin-right: -0.125rem;
+        }
+        
+        .table td, .table th {
+            padding: 0.25rem;
+            vertical-align: middle;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+        
+        .card {
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.25em 0.5em;
+        }
+        
+        .page-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.15rem;
+            line-height: 1.2;
+        }
+        
+        .page-subtitle {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        /* Minimize table spacing */
+        .table {
+            font-size: 0.7rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.3rem 0.4rem;
+            vertical-align: middle;
+        }
+        
+        /* Ultra-compact forms */
+        .form-control, .form-select {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.7rem;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+            color: #2c3e50;
         }
         
         .shadow {
@@ -176,6 +406,7 @@
         .table {
             border-radius: 10px;
             overflow: hidden;
+            margin-bottom: 1.5rem;
         }
         
         .table thead th {
@@ -183,22 +414,45 @@
             color: white;
             border: none;
             font-weight: 600;
+            padding: 1rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: 1px solid #e9ecef;
         }
         
         .table tbody tr:hover {
-            background-color: rgba(0,0,0,0.02);
+            background-color: rgba(102, 126, 234, 0.05);
         }
         
-        /* Form improvements */
-        .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            transition: all 0.3s ease;
+        .table-responsive {
+            border-radius: 10px;
+            box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.1);
         }
         
         .form-control:focus, .form-select:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .input-group-text {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px 0 0 8px;
         }
         
         /* Modern scrollbar */
@@ -241,63 +495,214 @@
             align-items: center;
             justify-content: center;
         }
+        
+        /* Page header styles */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats card improvements */
+        .stats-card { 
+            background: var(--primary-gradient);
+            color: white; 
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.15);
+        }
+        
+        .stats-card .card-body {
+            padding: 2rem 1.5rem;
+        }
+        
+        .stats-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-card p {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .stats-card i {
+            opacity: 0.8;
+        }
+        
+        /* Spacing utilities */
+        .section-spacing {
+            margin-bottom: 2.5rem;
+        }
+        
+        .content-spacing {
+            margin-bottom: 1.5rem;
+        }
+        
+        .element-spacing {
+            margin-bottom: 1rem;
+        }
+        
+        /* Ultra-compact responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .sidebar:hover {
+                width: 100%;
+            }
+            
+            .sidebar h4 {
+                opacity: 1;
+            }
+            
+            .sidebar .nav-link span {
+                opacity: 1;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-wrapper {
+                padding: 0.4rem;
+            }
+            
+            .page-title {
+                font-size: 1rem;
+            }
+            
+            .stats-card .card-body {
+                padding: 0.4rem;
+            }
+            
+            .stats-card h3 {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.65rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content-wrapper {
+                padding: 0.25rem;
+            }
+            
+            .card-body {
+                padding: 0.3rem;
+            }
+            
+            .stats-card .card-body {
+                padding: 0.3rem;
+            }
+            
+            .stats-card h3 {
+                font-size: 0.8rem;
+            }
+            
+            .stats-card p {
+                font-size: 0.6rem;
+            }
+            
+            .table tbody td, .table thead th {
+                padding: 0.25rem 0.15rem;
+                font-size: 0.65rem;
+            }
+            
+            .page-title {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.6rem;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid p-0">
+    <div class="row g-0">
         <!-- Sidebar -->
-        <div class="col-md-2 sidebar p-0">
+        <div class="sidebar">
             <div class="p-3">
                 <h4 class="text-center mb-4">
                     <i class="fas fa-boxes"></i> 
                     <span class="fw-bold">ISMS</span>
                 </h4>
                 <nav class="nav flex-column">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.dashboard') }}">
-                        <i class="fas fa-warehouse me-2"></i> Inventory
+                    <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.dashboard') }}" data-tooltip="Inventory">
+                        <i class="fas fa-warehouse"></i> <span>Inventory</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                        <i class="fas fa-box me-2"></i> Products
+                    <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}" data-tooltip="Products">
+                        <i class="fas fa-box"></i> <span>Products</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}">
-                        <i class="fas fa-users me-2"></i> Customers
+                    <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}" data-tooltip="Customers">
+                        <i class="fas fa-users"></i> <span>Customers</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
-                        <i class="fas fa-truck me-2"></i> Suppliers
+                    <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}" data-tooltip="Suppliers">
+                        <i class="fas fa-truck"></i> <span>Suppliers</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('sales.*') ? 'active' : '' }}" href="{{ route('sales.index') }}">
-                        <i class="fas fa-shopping-cart me-2"></i> Sales
+                    <a class="nav-link {{ request()->routeIs('sales.*') ? 'active' : '' }}" href="{{ route('sales.index') }}" data-tooltip="Sales">
+                        <i class="fas fa-shopping-cart"></i> <span>Sales</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}">
-                        <i class="fas fa-shopping-bag me-2"></i> Purchases
+                    <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}" data-tooltip="Purchases">
+                        <i class="fas fa-shopping-bag"></i> <span>Purchases</span>
                     </a>
-                    <hr class="text-white-50">
-                    <a class="nav-link {{ request()->routeIs('inventory.map') ? 'active' : '' }}" href="{{ route('inventory.map') }}">
-                        <i class="fas fa-map me-2"></i> Inventory Map
+                    <hr class="text-white-50 my-3">
+                    <a class="nav-link {{ request()->routeIs('ai.*') ? 'active' : '' }}" href="{{ route('ai.predictions.index') }}" data-tooltip="AI Predictions">
+                        <i class="fas fa-robot"></i> <span>AI Predictions</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.sales') }}">
-                        <i class="fas fa-chart-bar me-2"></i> Reports
+                    <a class="nav-link {{ request()->routeIs('inventory.map') ? 'active' : '' }}" href="{{ route('inventory.map') }}" data-tooltip="Inventory Map">
+                        <i class="fas fa-map"></i> <span>Inventory Map</span>
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}" data-tooltip="Reports">
+                        <i class="fas fa-chart-bar"></i> <span>Reports</span>
                     </a>
                 </nav>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="col-md-10">
-            <div class="container-fluid py-4">
+        <div class="main-content">
+            <div class="content-wrapper">
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                         <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                         <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>

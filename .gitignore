@@ -1,420 +1,204 @@
-# Complete Inventory Management & Forecasting System - .gitignore
-# This file covers both the AI engine and Laravel web interface
+# ===================================
+# INVENTORY MANAGEMENT SYSTEM .GITIGNORE
+# ===================================
+# Optimized for Laravel + AI/ML hybrid project
+# Only excludes files NOT required for running the system
 
-# ========================
-# SENSITIVE DATA & DATASETS
-# ========================
-# Never push actual business data to public repos
-data/
-*.csv
-*.xlsx
-*.xls
-*.json
-*.sql
-*.db
-*.sqlite
-*.sqlite3
+# ===================================
+# ENVIRONMENT & CONFIGURATION FILES
+# ===================================
+# These contain sensitive data and should be configured locally
+.env
+.env.local
+.env.production
+.env.staging
+*.env
 
-# Exclude results directory (contains business metrics)
+# Keep example files for setup guidance
+!.env.example
+
+# ===================================
+# DEPENDENCY DIRECTORIES
+# ===================================
+# These are large and can be regenerated from lock files
+
+# Python dependencies
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# Laravel PHP dependencies
+inventory\ management\ system\ UI/vendor/
+
+# Node.js dependencies
+inventory\ management\ system\ UI/node_modules/
+inventory\ management\ system\ UI/npm-debug.log*
+inventory\ management\ system\ UI/yarn-error.log
+
+# ===================================
+# GENERATED/COMPILED FILES
+# ===================================
+# These are built from source and can be regenerated
+
+# Laravel compiled assets
+inventory\ management\ system\ UI/public/hot
+inventory\ management\ system\ UI/public/storage
+inventory\ management\ system\ UI/public/mix-manifest.json
+
+# Python compiled files
+*.pyc
+*.pyo
+*.pyd
+build/
+dist/
+
+# ===================================
+# RUNTIME DATA & LOGS
+# ===================================
+# Generated during runtime, not needed in repository
+
+# Laravel logs and cache
+inventory\ management\ system\ UI/storage/logs/*.log
+inventory\ management\ system\ UI/storage/framework/cache/data/*
+inventory\ management\ system\ UI/storage/framework/sessions/*
+inventory\ management\ system\ UI/storage/framework/views/*
+
+# Keep the directory structure
+!inventory\ management\ system\ UI/storage/logs/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/cache/data/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/sessions/.gitkeep
+!inventory\ management\ system\ UI/storage/framework/views/.gitkeep
+
+# Python logs
+*.log
+
+# ===================================
+# USER DATA & UPLOADS
+# ===================================
+# User-generated content that should not be in git
+
+# Laravel user uploads (keep public directories)
+inventory\ management\ system\ UI/storage/app/public/uploads/*
+!inventory\ management\ system\ UI/storage/app/public/uploads/.gitkeep
+
+# ===================================
+# SENSITIVE BUSINESS DATA
+# ===================================
+# Never commit actual business data
+
+# Large datasets (use sample data instead)
+data/retail_store_inventory.csv
+data/*.csv
+data/*.xlsx
+data/*.json
+
+# Training results containing business metrics
 results/
 training_results.json
 performance_metrics.json
 
-# ========================
-# LARAVEL WEB INTERFACE
-# ========================
-# Laravel specific - only ignore what should actually be ignored
-inventory\ management\ system\ UI/.env
-!inventory\ management\ system\ UI/.env.example
+# Diagnostic images (may contain business data)
+diogonistic\ images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+!docs/images/*.png
+!docs/images/*.jpg
 
-# Laravel dependencies (these should be ignored)
-inventory\ management\ system\ UI/vendor/
-inventory\ management\ system\ UI/node_modules/
+# ===================================
+# LARGE MODEL FILES
+# ===================================
+# AI models are large and should use Git LFS or cloud storage
 
-# Laravel storage (only ignore cache and logs, not the structure)
-inventory\ management\ system\ UI/storage/app/public/storage
-inventory\ management\ system\ UI/storage/framework/cache/data/*
-!inventory\ management\ system\ UI/storage/framework/cache/data/.gitkeep
-inventory\ management\ system\ UI/storage/framework/sessions/*
-!inventory\ management\ system\ UI/storage/framework/sessions/.gitkeep
-inventory\ management\ system\ UI/storage/framework/views/*
-!inventory\ management\ system\ UI/storage/framework/views/.gitkeep
-inventory\ management\ system\ UI/storage/logs/*.log
-
-# Laravel compiled assets (these get built)
-inventory\ management\ system\ UI/public/hot
-inventory\ management\ system\ UI/public/storage
-inventory\ management\ system\ UI/public/build/
-inventory\ management\ system\ UI/public/css/app.css
-inventory\ management\ system\ UI/public/js/app.js
-inventory\ management\ system\ UI/public/mix-manifest.json
-
-# Lock files for Laravel (composer.lock should usually be committed but can be ignored for flexibility)
-# inventory\ management\ system\ UI/composer.lock
-
-# ========================
-# MACHINE LEARNING MODELS  
-# ========================
-# ========================
-# Large model files should not be in git (use Git LFS or cloud storage)
-models/
+models/*.h5
+models/*.pkl
+models/*.joblib
 *.h5
 *.pkl
 *.joblib
 *.model
 *.weights
-*.ckpt
-*.pb
-*.tflite
-*.onnx
 
-# Model checkpoints and training artifacts
-checkpoints/
-saved_models/
-tensorboard_logs/
-logs/
+# Keep model architecture files and small config files
+!models/config.json
+!models/README.md
 
-# ========================
-# PYTHON
-# ========================
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# ===================================
+# DEVELOPMENT & TESTING
+# ===================================
+# Development artifacts not needed for production
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# pdm
-.pdm.toml
-
-# PEP 582
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-.idea/
-
-# ========================
-# MACHINE LEARNING SPECIFIC
-# ========================
-# TensorFlow
-*.tfevents.*
-*.tfevent
-tensorboard/
-
-# PyTorch
-*.pth
-*.pt
-
-# Weights & Biases
-wandb/
-
-# MLflow
-mlruns/
-mlartifacts/
-
-# DVC (Data Version Control)
-.dvc
-.dvcignore
-
-# Experiment tracking
-experiments/
-runs/
-
-# ========================
-# OPERATING SYSTEM
-# ========================
-# Windows
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-# Linux
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-# ========================
-# IDE & EDITORS
-# ========================
-# Visual Studio Code
+# IDE files
 .vscode/
-*.code-workspace
-
-# Sublime Text
+.idea/
 *.sublime-project
 *.sublime-workspace
 
-# Vim
-[._]*.s[a-v][a-z]
-!*.svg
-[._]*.sw[a-p]
-[._]s[a-rt-v][a-z]
-[._]ss[a-gi-z]
-[._]sw[a-p]
+# OS files
+Thumbs.db
+.DS_Store
+.directory
 
-# Emacs
-*~
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-auto-save-list
-tramp
-.\#*
-
-# ========================
-# CONFIGURATION & SECRETS
-# ========================
-# Environment variables
-.env
-.env.local
-.env.development
-.env.test
-.env.production
-
-# API keys and secrets
-config/secrets.py
-secrets.json
-api_keys.txt
-credentials.json
-
-# Database credentials
-database_config.py
-db_credentials.json
-
-# ========================
-# TEMPORARY & CACHE FILES
-# ========================
 # Temporary files
 *.tmp
 *.temp
 *.bak
 *.swp
-*.swo
 *~
 
-# Cache directories
-.cache/
-cache/
-tmp/
-temp/
+# Test coverage
+htmlcov/
+.coverage
+coverage.xml
 
-# ========================
-# DOCUMENTATION BUILD
-# ========================
-docs/build/
-docs/_build/
-site/
+# ===================================
+# KEEP ESSENTIAL FILES
+# ===================================
+# Force include important files that might be caught by patterns above
 
-# ========================
-# DEPLOYMENT & DOCKER
-# ========================
-# Docker
+# Laravel essential files
+!inventory\ management\ system\ UI/artisan
+!inventory\ management\ system\ UI/composer.json
+!inventory\ management\ system\ UI/composer.lock
+!inventory\ management\ system\ UI/package.json
+!inventory\ management\ system\ UI/webpack.mix.js
+
+# Python essential files
+!requirements.txt
+!setup.py
+
+# Documentation
+!README.md
+!INTEGRATION_GUIDE.md
+!AI_INTEGRATION_SETUP.md
+
+# Sample/Example files
+!Sample_PHP_Connection.php
+!data/sample_inventory.csv.example
+
+# Configuration templates
+!config_template.py
+
+# ===================================
+# DEPLOYMENT ARTIFACTS
+# ===================================
+# Don't commit deployment-specific files
+
+docker-compose.override.yml
+.docker/
 Dockerfile.prod
-docker-compose.prod.yml
-.dockerignore
 
-# Kubernetes
-*.yaml
-!example*.yaml
-!template*.yaml
+# ===================================
+# BACKUP FILES
+# ===================================
+# Backup files should not be in version control
 
-# ========================
-# CUSTOM PROJECT EXCLUDES
-# ========================
-# Diagnostic images (may contain sensitive business data)
-diagnostic_images/
-diogonistic\ images/
-plots/
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-
-# Testing data
-test_data/
-sample_data/
-mock_data/
-
-# Backup files
-backup/
 *.backup
-
-# Archive files
+backup/
 *.zip
 *.tar.gz
 *.rar
-*.7z
-
-# ========================
-# KEEP THESE FILES  
-# ========================
-# Important: Use ! to force-include files you want to keep
-!inventory\ management\ system\ UI/**/*.php
-!inventory\ management\ system\ UI/artisan
-!inventory\ management\ system\ UI/composer.json
-!inventory\ management\ system\ UI/package.json
-
-# Only ignore specific PHP files in root that aren't needed
-Sample_PHP_Connection.php
-
-# Example configuration files (rename to use)
-!config_template.py
-!.env.example
-!sample_dataset.csv.example

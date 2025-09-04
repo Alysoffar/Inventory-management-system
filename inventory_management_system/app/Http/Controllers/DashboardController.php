@@ -20,9 +20,6 @@ class DashboardController extends Controller
         $todayRevenue = 2540.50; // Example data
         $todaySalesCount = 18; // Example data
         
-        // Low stock count - Required for dashboard view
-        $lowStockCount = 8; // Example data - items with quantity below threshold
-        
         // Low stock products - Replace with actual collection when models are ready
         $lowStockProducts = collect([
             (object)['name' => 'Widget A', 'quantity' => 5, 'category' => 'Electronics'],
@@ -89,7 +86,6 @@ class DashboardController extends Controller
             'totalSuppliers',
             'todayRevenue',
             'todaySalesCount',
-            'lowStockCount',
             'lowStockProducts',
             'recentSales',
             'recentPurchases',

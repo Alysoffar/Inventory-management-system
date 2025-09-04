@@ -12,14 +12,48 @@ class PurchaseController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Purchase::with(['product', 'supplier']);
+        // Build the query with supplier relationship
+        $query = Purchase::with(['supplier']);
+        
+        // Apply filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        if ($request->filled('supplier')) {
+            $query->where('supplier_id', $request->supplier);
+        }
+        
+        // Search functionality
         if ($request->has('search')) {
             $search = $request->get('search');
-            $query->whereHas('product', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
-                  ->orWhereHas('supplier', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
+            $query->whereHas('supplier', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
         }
+        
+        // Get paginated purchases
         $purchases = $query->orderBy('created_at', 'desc')->paginate(10);
-        return view('purchases.index', compact('purchases'));
+        
+        // Calculate statistics
+        $totalPurchases = Purchase::count();
+        $totalCost = Purchase::sum('total_amount') ?? 0;
+        $todayPurchases = Purchase::whereDate('created_at', today())->count();
+        $averagePurchase = $totalPurchases > 0 ? $totalCost / $totalPurchases : 0;
+        
+        // Get suppliers for filter dropdown
+        $suppliers = Supplier::orderBy('name')->get();
+        
+        return view('purchases.index', compact(
+            'purchases', 
+            'totalPurchases', 
+            'totalCost', 
+            'todayPurchases', 
+            'averagePurchase',
+            'suppliers'
+        ));
     }
 
     public function create()

@@ -1,0 +1,24 @@
+{
+  "model_type": "Linear Regression",
+  "mape": 20.96773235640975,
+  "r2": 0.994020166062473,
+  "mae": 7.275726113442902,
+  "features": [
+    "Demand_Forecast",
+    "Inventory_Level",
+    "Month",
+    "DayOfWeek",
+    "IsWeekend",
+    "Quarter",
+    "Demand_to_Inventory_Ratio",
+    "Price_per_Demand",
+    "Demand_Yesterday",
+    "Sales_Yesterday",
+    "Demand_Avg_3Days",
+    "Store_Encoded",
+    "Product_Encoded"
+  ],
+  "user": "Alysoffar",
+  "date": "2025-09-03 19:18:54 UTC",
+  "production_ready": "YES"
+}
