@@ -7,47 +7,37 @@
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-0 text-gray-800">📦 Products Management</h1>
+            <h2 class="mb-2 fw-semibold">📦 Products Management</h2>
             <p class="mb-0 text-muted">Manage your inventory products and stock levels</p>
         </div>
         <div class="btn-group">
             <a href="{{ route('products.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add Product
+                <i class="fas fa-plus me-2"></i> Add Product
             </a>
             <a href="{{ route('inventory.dashboard') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-warehouse"></i> Inventory
+                <i class="fas fa-warehouse me-2"></i> Inventory
             </a>
         </div>
     </div>
 
     <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Products
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['total_products']) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-boxes text-primary mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['total_products']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Total Products</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Low Stock
-                            </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['low_stock']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Low Stock</p>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['low_stock_count']) }}</div>
                         </div>
                         <div class="col-auto">
@@ -58,49 +48,37 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Out of Stock
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['out_of_stock_count']) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-times-circle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Value
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ number_format($stats['total_value'], 2) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-times-circle text-danger mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['out_of_stock_count']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Out of Stock</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-dollar-sign text-success mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($stats['total_value'], 2) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Total Value</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Filters and Search -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Filter & Search Products</h6>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header py-2 px-3">
+            <h6 class="mb-0 fw-semibold text-primary">Filter & Search Products</h6>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
             <form method="GET" action="{{ route('products.index') }}" class="row g-3">
                 <div class="col-md-3">
                     <input type="text" name="search" class="form-control" 
@@ -129,10 +107,10 @@
                 <div class="col-md-3">
                     <div class="btn-group w-100">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Search
+                            <i class="fas fa-search me-2"></i> Search
                         </button>
                         <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-times"></i> Clear
+                            <i class="fas fa-times me-2"></i> Clear
                         </a>
                     </div>
                 </div>
@@ -141,12 +119,12 @@
     </div>
 
     <!-- Products Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Products List</h6>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header py-2 px-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="mb-0 fw-semibold text-primary">Products List</h6>
             <div class="dropdown">
                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-download"></i> Export
+                    <i class="fas fa-download me-2"></i> Export
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ route('inventory.export') }}?format=csv">CSV Format</a></li>
@@ -157,43 +135,43 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead>
+                    <thead class="table-light">
                         <tr>
-                            <th class="border-0">Product</th>
-                            <th class="border-0">SKU</th>
-                            <th class="border-0">Category</th>
-                            <th class="border-0">Price</th>
-                            <th class="border-0">Stock</th>
-                            <th class="border-0">Location</th>
-                            <th class="border-0">Status</th>
-                            <th class="border-0">Actions</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Product</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">SKU</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Category</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Price</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Stock</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Location</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Status</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($products as $product)
                             <tr>
-                                <td>
+                                <td class="py-2 px-3">
                                     <div class="d-flex align-items-center">
                                         <div class="ms-3">
-                                            <div class="fw-bold">{{ $product->name }}</div>
+                                            <div class="fw-bold" style="font-size: 1.1rem;">{{ $product->name }}</div>
                                             <div class="text-muted small">{{ $product->description ?? 'No description' }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="badge badge-secondary">{{ $product->sku }}</span>
+                                <td class="py-2 px-3">
+                                    <span class="badge bg-secondary" style="font-size: 0.9rem;">{{ $product->sku }}</span>
                                 </td>
-                                <td>{{ $product->category }}</td>
-                                <td class="fw-bold">${{ number_format($product->price, 2) }}</td>
-                                <td>
+                                <td class="py-2 px-3" style="font-size: 1rem;">{{ $product->category }}</td>
+                                <td class="py-2 px-3 fw-bold" style="font-size: 1.1rem;">${{ number_format($product->price, 2) }}</td>
+                                <td class="py-3 px-4">
                                     <div class="d-flex align-items-center">
                                         <span class="badge 
                                             @if($product->stock_quantity <= 0)
-                                                badge-danger
+                                                bg-danger
                                             @elseif($product->isLowStock())
-                                                badge-warning
+                                                bg-warning
                                             @else
-                                                badge-success
+                                                bg-success
                                             @endif
                                         ">
                                             {{ $product->stock_quantity }}
@@ -204,7 +182,7 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td>
+                                <td class="py-3 px-4">
                                     @if($product->location)
                                         <div class="d-flex align-items-center">
                                             <i class="fas fa-map-marker-alt text-muted me-1"></i>
@@ -214,19 +192,19 @@
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="py-3 px-4">
                                     <span class="badge 
                                         @switch($product->status)
-                                            @case('active') badge-success @break
-                                            @case('inactive') badge-warning @break
-                                            @case('discontinued') badge-danger @break
+                                            @case('active') bg-success @break
+                                            @case('inactive') bg-warning @break
+                                            @case('discontinued') bg-danger @break
                                             @default badge-secondary
                                         @endswitch
                                     ">
                                         {{ ucfirst($product->status) }}
                                     </span>
                                 </td>
-                                <td>
+                                <td class="py-3 px-4">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('products.show', $product) }}" 
                                            class="btn btn-sm btn-outline-info" title="View">
@@ -257,11 +235,11 @@
                             <tr>
                                 <td colspan="8" class="text-center py-5">
                                     <div class="text-center">
-                                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                                        <h5 class="text-muted">No products found</h5>
-                                        <p class="text-muted">Try adjusting your search criteria or add a new product.</p>
+                                        <i class="fas fa-box-open fa-3x text-muted mb-4"></i>
+                                        <h4 class="text-muted mb-3">No products found</h4>
+                                        <p class="text-muted mb-4">Try adjusting your search criteria or add a new product.</p>
                                         <a href="{{ route('products.create') }}" class="btn btn-primary">
-                                            <i class="fas fa-plus"></i> Add First Product
+                                            <i class="fas fa-plus me-2"></i> Add First Product
                                         </a>
                                     </div>
                                 </td>

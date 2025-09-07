@@ -5,105 +5,79 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Sales Management</h4>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Sales</li>
-                    </ol>
-                </div>
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-2 fw-semibold">💰 Sales Management</h2>
+                <p class="mb-0 text-muted">Track and manage your sales transactions</p>
+            </div>
+            <div class="btn-group">
+                <a href="{{ route('sales.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> New Sale
+                </a>
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
 
     <!-- Stats Cards -->
-    <div class="row">
+    <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Sales</p>
-                            <h4 class="mb-2">{{ $totalSales ?? 0 }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+12.5%</span>from previous month</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-primary rounded-3">
-                                <i class="ri-shopping-cart-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-shopping-cart text-primary mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $totalSales ?? 0 }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Total Sales</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+12.5% from last month</small>
                 </div>
             </div>
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Revenue</p>
-                            <h4 class="mb-2">${{ number_format($totalRevenue ?? 0, 2) }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+8.3%</span>from previous month</p>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-dollar-sign text-success mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($totalRevenue ?? 0, 2) }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Total Revenue</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+8.3% from last month</small>
                         </div>
                         <div class="avatar-sm">
                             <span class="avatar-title bg-light text-success rounded-3">
                                 <i class="ri-money-dollar-circle-line font-size-24"></i>
                             </span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Today's Sales</p>
-                            <h4 class="mb-2">{{ $todaySales ?? 0 }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+5.2%</span>from yesterday</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-info rounded-3">
-                                <i class="ri-calendar-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-calendar-day text-info mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $todaySales ?? 0 }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Today's Sales</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+5.2% from yesterday</small>
                 </div>
             </div>
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Average Sale</p>
-                            <h4 class="mb-2">${{ number_format($averageSale ?? 0, 2) }}</h4>
-                            <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i>-2.1%</span>from previous month</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-warning rounded-3">
-                                <i class="ri-bar-chart-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-chart-bar text-warning mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($averageSale ?? 0, 2) }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Average Sale</p>
+                    <small class="text-danger"><i class="fas fa-arrow-down me-1"></i>-2.1% from last month</small>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Sales Table -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header py-3 px-4">
+            <div class="row align-items-center">
                         <div class="col">
                             <h4 class="card-title">Sales List</h4>
                         </div>
@@ -123,79 +97,101 @@
                             <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-3">
-                            <label for="date_to" class="form-label">To Date</label>
-                            <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                <div class="col-md-6">
+                    <h5 class="mb-0 fw-semibold">Sales History</h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#filtersCollapse">
+                            <i class="fas fa-filter me-2"></i> Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <!-- Filters -->
+            <div class="collapse" id="filtersCollapse">
+                <form method="GET" action="{{ route('sales.index') }}" class="row g-3 mb-4 p-3 bg-light rounded">
+                    <div class="col-md-3">
+                        <label for="date_from" class="form-label">From Date</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date_to" class="form-label">To Date</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="customer" class="form-label">Customer</label>
+                        <select class="form-select" id="customer" name="customer">
+                            <option value="">All Customers</option>
+                            @if(isset($customers))
+                                @foreach($customers as $customer)
+                                    <option value="{{ $customer->id }}" {{ request('customer') == $customer->id ? 'selected' : '' }}>
+                                        {{ $customer->name }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i> Filter
+                            </button>
                         </div>
-                        <div class="col-md-3">
-                            <label for="customer" class="form-label">Customer</label>
-                            <select class="form-select" id="customer" name="customer">
-                                <option value="">All Customers</option>
-                                @if(isset($customers))
-                                    @foreach($customers as $customer)
-                                        <option value="{{ $customer->id }}" {{ request('customer') == $customer->id ? 'selected' : '' }}>
-                                            {{ $customer->name }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-outline-primary">
-                                    <i class="ri-search-line align-middle me-1"></i> Filter
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                </form>
+            </div>
 
-                    <!-- Sales Table -->
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Sale ID</th>
-                                    <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Sale Info</th>
-                                    <th>Total Amount</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($sales ?? [] as $sale)
-                                <tr>
-                                    <td>
-                                        <strong>#{{ str_pad($sale->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <strong>{{ $sale->customer->name ?? 'N/A' }}</strong>
-                                            @if(isset($sale->customer->email))
-                                                <br><small class="text-muted">{{ $sale->customer->email }}</small>
+            <!-- Sales Table -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Sale ID</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Customer</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Date</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Sale Info</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Total Amount</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Status</th>
+                            <th class="py-2 px-3" style="font-size: 0.9rem;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($sales ?? [] as $sale)
+                        <tr>
+                            <td class="py-2 px-3">
+                                <strong style="font-size: 1.1rem;">#{{ str_pad($sale->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
+                            </td>
+                            <td class="py-2 px-3">
+                                <div>
+                                    <strong style="font-size: 1.1rem;">{{ $sale->customer->name ?? 'N/A' }}</strong>
+                                    @if(isset($sale->customer->email))
+                                        <br><small class="text-muted">{{ $sale->customer->email }}</small>
                                             @endif
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3" style="font-size: 1rem;">
                                         {{ $sale->created_at ? $sale->created_at->format('M d, Y') : 'N/A' }}
                                         <br><small class="text-muted">{{ $sale->created_at ? $sale->created_at->format('h:i A') : '' }}</small>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3" style="font-size: 1rem;">
                                         <div>
-                                            <strong>Sale #{{ str_pad($sale->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
+                                            <strong style="font-size: 1.1rem;">Sale #{{ str_pad($sale->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
                                             <br><small class="text-muted">{{ $sale->sale_date ? $sale->sale_date->format('M d, Y') : 'N/A' }}</small>
                                         </div>
                                     </td>
-                                    <td>
-                                        <strong class="text-success">${{ number_format($sale->total_amount ?? 0, 2) }}</strong>
+                                    <td class="py-2 px-3">
+                                        <strong class="text-success" style="font-size: 1.2rem;">${{ number_format($sale->total_amount ?? 0, 2) }}</strong>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-{{ ($sale->status ?? 'pending') === 'completed' ? 'success' : (($sale->status ?? 'pending') === 'pending' ? 'warning' : 'secondary') }}">
+                                    <td class="py-2 px-3">
+                                        <span class="badge bg-{{ ($sale->status ?? 'pending') === 'completed' ? 'success' : (($sale->status ?? 'pending') === 'pending' ? 'warning' : 'secondary') }}" style="font-size: 0.9rem;">
                                             {{ ucfirst($sale->status ?? 'pending') }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3">
                                         <div class="dropdown">
                                             <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Actions

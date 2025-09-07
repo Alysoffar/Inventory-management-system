@@ -396,6 +396,77 @@ class AIPredictionController extends Controller
     }
     
     /**
+     * Export AI predictions data
+     */
+    public function export(Request $request)
+    {
+        $format = $request->get('format', 'csv');
+        $predictions = $this->getRecentPredictions();
+        
+        if ($format === 'csv') {
+            return $this->exportToCsv($predictions);
+        } elseif ($format === 'pdf') {
+            return $this->exportToPdf($predictions);
+        }
+        
+        return redirect()->back()->with('error', 'Invalid export format');
+    }
+    
+    /**
+     * Export predictions to CSV
+     */
+    private function exportToCsv($predictions)
+    {
+        $filename = 'ai_predictions_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($predictions) {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Headers
+            fputcsv($file, [
+                'Product Name',
+                'Current Stock',
+                'Predicted Demand',
+                'Reorder Recommendation',
+                'Stockout Risk',
+                'Confidence Score',
+                'Prediction Date'
+            ]);
+            
+            // CSV Data
+            foreach ($predictions as $prediction) {
+                fputcsv($file, [
+                    $prediction['product_name'] ?? 'N/A',
+                    $prediction['current_stock'] ?? 0,
+                    $prediction['predicted_demand'] ?? 0,
+                    $prediction['should_reorder'] ? 'Yes' : 'No',
+                    $prediction['stockout_risk'] ?? 'LOW',
+                    $prediction['confidence'] ?? 0,
+                    $prediction['created_at'] ?? date('Y-m-d H:i:s')
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+    
+    /**
+     * Export predictions to PDF
+     */
+    private function exportToPdf($predictions)
+    {
+        // For now, redirect to CSV - PDF export can be implemented later with a PDF library
+        return $this->exportToCsv($predictions);
+    }
+    
+    /**
      * Identify revenue opportunities
      */
     private function identifyRevenueOpportunities()

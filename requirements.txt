@@ -1,27 +1,336 @@
+# ================================================
 # AI-Powered Inventory Management System
 # Python Dependencies for AI Forecasting Engine
+# ================================================
+#
+# This file contains all Python packages required for the
+# AI prediction and forecasting components of the inventory
+# management system.
+#
+# Installation: pip install -r requirements.txt
+# Python Version: 3.8+ required
+#
+# Last Updated: September 8, 2025
+# Author: Alys Offar (alysoffar06@gmail.com)
 
-# Core ML and Data Science
-tensorflow>=2.10.0
-pandas>=1.5.0
-numpy>=1.21.0
-scikit-learn>=1.1.0
+# ================================================
+# CORE MACHINE LEARNING FRAMEWORKS
+# ================================================
 
-# API Framework
-flask>=2.2.0
-flask-cors>=4.0.0
-requests>=2.28.0
+# TensorFlow - Deep learning framework for neural networks
+tensorflow>=2.13.0,<3.0.0
+# Alternative: tensorflow-cpu>=2.13.0 for CPU-only installations
 
-# Data Processing
-joblib>=1.2.0
-matplotlib>=3.5.0
-seaborn>=0.11.0
+# Keras - High-level neural networks API (included with TensorFlow 2.x)
+# keras>=2.13.0  # Commented out as it's included with TensorFlow
 
-# Utilities
-python-dateutil>=2.8.0
-pytz>=2022.1
+# Scikit-learn - Traditional machine learning algorithms
+scikit-learn>=1.3.0,<2.0.0
 
-# Optional: Enhanced Features
-# tensorboard>=2.10.0  # For model visualization
-# jupyter>=1.0.0       # For notebook development
-# plotly>=5.0.0        # For interactive plots
+# XGBoost - Gradient boosting framework (optional but recommended)
+xgboost>=1.7.0,<2.0.0
+
+# LightGBM - Fast gradient boosting (alternative to XGBoost)
+lightgbm>=4.0.0,<5.0.0
+
+# ================================================
+# DATA PROCESSING AND ANALYSIS
+# ================================================
+
+# Pandas - Data manipulation and analysis
+pandas>=2.0.0,<3.0.0
+
+# NumPy - Numerical computing with arrays
+numpy>=1.24.0,<2.0.0
+
+# SciPy - Scientific computing library
+scipy>=1.11.0,<2.0.0
+
+# Statsmodels - Statistical modeling
+statsmodels>=0.14.0,<1.0.0
+
+# ================================================
+# WEB FRAMEWORK AND API
+# ================================================
+
+# Flask - Lightweight web framework for AI API
+Flask>=2.3.0,<3.0.0
+
+# Flask-CORS - Cross-Origin Resource Sharing support
+Flask-CORS>=4.0.0,<5.0.0
+
+# Flask-RESTful - RESTful API development
+Flask-RESTful>=0.3.10,<1.0.0
+
+# Gunicorn - WSGI HTTP Server for production
+gunicorn>=21.0.0,<22.0.0
+
+# Requests - HTTP library for API calls
+requests>=2.31.0,<3.0.0
+
+# ================================================
+# DATA VISUALIZATION
+# ================================================
+
+# Matplotlib - Basic plotting library
+matplotlib>=3.7.0,<4.0.0
+
+# Seaborn - Statistical data visualization
+seaborn>=0.12.0,<1.0.0
+
+# Plotly - Interactive plotting library
+plotly>=5.15.0,<6.0.0
+
+# ================================================
+# DATA STORAGE AND SERIALIZATION
+# ================================================
+
+# Joblib - Efficient serialization of NumPy arrays
+joblib>=1.3.0,<2.0.0
+
+# Pickle - Python object serialization (built-in)
+# pickle  # Built-in module
+
+# HDF5 support for large datasets
+h5py>=3.9.0,<4.0.0
+tables>=3.8.0,<4.0.0
+
+# ================================================
+# DATE AND TIME PROCESSING
+# ================================================
+
+# Python-dateutil - Powerful date/time extensions
+python-dateutil>=2.8.2,<3.0.0
+
+# Pytz - Timezone calculations
+pytz>=2023.3
+
+# Arrow - Better date/time handling (alternative to dateutil)
+arrow>=1.2.3,<2.0.0
+
+# ================================================
+# CONFIGURATION AND ENVIRONMENT
+# ================================================
+
+# Python-dotenv - Load environment variables from .env file
+python-dotenv>=1.0.0,<2.0.0
+
+# PyYAML - YAML configuration file support
+PyYAML>=6.0,<7.0
+
+# Configparser - INI file configuration (built-in)
+# configparser  # Built-in module
+
+# ================================================
+# DATABASE CONNECTIVITY
+# ================================================
+
+# SQLAlchemy - SQL toolkit and ORM
+SQLAlchemy>=2.0.0,<3.0.0
+
+# PyMySQL - MySQL database connector
+PyMySQL>=1.1.0,<2.0.0
+
+# Psycopg2 - PostgreSQL adapter
+psycopg2-binary>=2.9.0,<3.0.0
+
+# ================================================
+# MONITORING AND LOGGING
+# ================================================
+
+# Loguru - Enhanced logging library
+loguru>=0.7.0,<1.0.0
+
+# APScheduler - Advanced Python Scheduler
+APScheduler>=3.10.0,<4.0.0
+
+# ================================================
+# DEVELOPMENT AND TESTING
+# ================================================
+
+# Pytest - Testing framework
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+
+# Black - Code formatter
+black>=23.7.0,<24.0.0
+
+# Flake8 - Linting tool
+flake8>=6.0.0,<7.0.0
+
+# Jupyter - Interactive development environment
+jupyter>=1.0.0,<2.0.0
+jupyterlab>=4.0.0,<5.0.0
+
+# IPython - Enhanced interactive Python shell
+ipython>=8.14.0,<9.0.0
+
+# ================================================
+# PERFORMANCE AND OPTIMIZATION
+# ================================================
+
+# Numba - JIT compiler for numerical functions
+numba>=0.57.0,<1.0.0
+
+# Cython - C extensions for Python
+Cython>=3.0.0,<4.0.0
+
+# Memory-profiler - Monitor memory usage
+memory-profiler>=0.61.0,<1.0.0
+
+# Line-profiler - Line-by-line profiling
+line-profiler>=4.1.0,<5.0.0
+
+# ================================================
+# OPTIONAL ADVANCED FEATURES
+# ================================================
+
+# TensorBoard - Visualization for TensorFlow
+tensorboard>=2.13.0,<3.0.0
+
+# Hyperopt - Hyperparameter optimization
+hyperopt>=0.2.7,<1.0.0
+
+# Optuna - Hyperparameter optimization framework (alternative)
+optuna>=3.2.0,<4.0.0
+
+# SHAP - Explainable AI
+shap>=0.42.0,<1.0.0
+
+# Lime - Local interpretable model-agnostic explanations
+lime>=0.2.0.1,<1.0.0
+
+# ================================================
+# TIME SERIES SPECIFIC LIBRARIES
+# ================================================
+
+# Prophet - Time series forecasting by Facebook
+prophet>=1.1.4,<2.0.0
+
+# ARIMA models and time series analysis
+pmdarima>=2.0.0,<3.0.0
+
+# Seasonal decomposition
+seasonal>=0.3.1,<1.0.0
+
+# ================================================
+# NATURAL LANGUAGE PROCESSING (Optional)
+# ================================================
+
+# NLTK - Natural Language Toolkit
+# nltk>=3.8.0,<4.0.0
+
+# SpaCy - Industrial-strength NLP
+# spacy>=3.6.0,<4.0.0
+
+# ================================================
+# IMAGE PROCESSING (Optional)
+# ================================================
+
+# Pillow - Image processing library
+# Pillow>=10.0.0,<11.0.0
+
+# OpenCV - Computer vision library
+# opencv-python>=4.8.0,<5.0.0
+
+# ================================================
+# ADDITIONAL UTILITIES
+# ================================================
+
+# Tqdm - Progress bars
+tqdm>=4.65.0,<5.0.0
+
+# Click - Command line interface creation
+click>=8.1.0,<9.0.0
+
+# Rich - Rich text and beautiful formatting
+rich>=13.4.0,<14.0.0
+
+# Colorama - Cross-platform colored terminal text
+colorama>=0.4.6,<1.0.0
+
+# ================================================
+# PRODUCTION DEPLOYMENT
+# ================================================
+
+# uWSGI - Application server (alternative to Gunicorn)
+# uwsgi>=2.0.21,<3.0.0
+
+# Redis - In-memory data structure store
+redis>=4.6.0,<5.0.0
+
+# Celery - Distributed task queue
+celery>=5.3.0,<6.0.0
+
+# ================================================
+# SECURITY AND ENCRYPTION
+# ================================================
+
+# Cryptography - Cryptographic recipes and primitives
+cryptography>=41.0.0,<42.0.0
+
+# PyJWT - JSON Web Token implementation
+PyJWT>=2.8.0,<3.0.0
+
+# ================================================
+# INSTALLATION NOTES:
+# ================================================
+#
+# 1. Basic Installation:
+#    pip install -r requirements.txt
+#
+# 2. Development Installation (includes testing tools):
+#    pip install -r requirements.txt
+#    pip install pytest black flake8 jupyter
+#
+# 3. Production Installation (minimal dependencies):
+#    pip install tensorflow pandas numpy scikit-learn flask flask-cors gunicorn
+#
+# 4. GPU Support (for TensorFlow):
+#    pip install tensorflow-gpu>=2.13.0
+#    # Note: Requires CUDA and cuDNN installation
+#
+# 5. Alternative CPU-only TensorFlow:
+#    pip install tensorflow-cpu>=2.13.0
+#
+# 6. Conda Installation (alternative to pip):
+#    conda install tensorflow pandas numpy scikit-learn flask
+#    conda install -c conda-forge flask-cors plotly
+#
+# ================================================
+# SYSTEM REQUIREMENTS:
+# ================================================
+#
+# - Python: 3.8+ (3.9+ recommended)
+# - Memory: 4GB RAM minimum (8GB+ recommended)
+# - Storage: 2GB free space for dependencies
+# - OS: Windows 10+, macOS 10.15+, Ubuntu 18.04+
+# - Optional: NVIDIA GPU with CUDA support for faster training
+#
+# ================================================
+# TROUBLESHOOTING:
+# ================================================
+#
+# Common Issues:
+#
+# 1. TensorFlow Installation Issues:
+#    - Use: pip install --upgrade pip setuptools
+#    - For Apple M1: pip install tensorflow-macos tensorflow-metal
+#
+# 2. Memory Issues:
+#    - Reduce batch size in training scripts
+#    - Use tensorflow-cpu instead of full tensorflow
+#
+# 3. Windows-specific Issues:
+#    - Install Visual C++ Build Tools
+#    - Use pip install --no-cache-dir for large packages
+#
+# 4. macOS Issues:
+#    - Install Xcode command line tools: xcode-select --install
+#    - For M1 Macs: Use conda-forge channel
+#
+# 5. Linux Issues:
+#    - Install build-essential: sudo apt install build-essential
+#    - Install Python development headers: sudo apt install python3-dev
+#
+# ================================================

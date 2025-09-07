@@ -18,6 +18,7 @@ class InventoryController extends Controller
         // Get inventory statistics
         $stats = [
             'total_products' => Product::active()->count(),
+            'low_stock' => Product::active()->whereRaw('stock_quantity <= minimum_stock_level')->count(),
             'low_stock_products' => Product::active()->whereRaw('stock_quantity <= minimum_stock_level')->count(),
             'out_of_stock_products' => Product::active()->where('stock_quantity', '<=', 0)->count(),
             'total_inventory_value' => Product::active()->selectRaw('SUM(stock_quantity * price) as total')->value('total') ?? 0,

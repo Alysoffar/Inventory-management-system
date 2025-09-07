@@ -7,103 +7,71 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-0 text-gray-800">📦 Inventory Dashboard</h1>
+            <h2 class="mb-2 fw-semibold">📦 Inventory Dashboard</h2>
             <p class="mb-0 text-muted">Monitor and manage your inventory in real-time</p>
         </div>
         <div class="btn-group">
             <a href="{{ route('products.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add Product
+                <i class="fas fa-plus me-2"></i> Add Product
             </a>
             <button type="button" class="btn btn-outline-secondary" onclick="runInventoryCheck()">
-                <i class="fas fa-sync"></i> Check Inventory
+                <i class="fas fa-sync me-2"></i> Check Inventory
             </button>
             <a href="{{ route('inventory.export') }}?format=csv" class="btn btn-outline-success">
-                <i class="fas fa-download"></i> Export
+                <i class="fas fa-download me-2"></i> Export
             </a>
         </div>
     </div>
 
     <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Products
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['total_products']) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-boxes text-primary mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['total_products']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Total Products</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Low Stock Items
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['low_stock_products']) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['low_stock']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Low Stock Items</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Out of Stock
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($stats['out_of_stock_products']) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-times-circle fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-times-circle text-danger mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ number_format($stats['out_of_stock_products']) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Out of Stock</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Inventory Value
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ number_format($stats['total_inventory_value'], 2) }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-dollar-sign text-success mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($stats['total_inventory_value'], 2) }}</h2>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Inventory Value</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         <!-- Recent Activities -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Recent Inventory Activities</h6>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header py-3 px-4 d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="mb-0 fw-semibold text-primary">Recent Inventory Activities</h5>
                     <a href="{{ route('inventory.logs') }}" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body">
@@ -123,6 +91,17 @@
                                                 {{ ucfirst(str_replace('_', ' ', $activity->type)) }} - 
                                                 {{ $activity->quantity_changed > 0 ? '+' : '' }}{{ $activity->quantity_changed }} units
                                                 ({{ $activity->quantity_before }} → {{ $activity->quantity_after }})
+                </div>
+                <div class="card-body p-4">
+                    @if($activities ?? false)
+                        <div class="list-group list-group-flush">
+                            @foreach($activities as $activity)
+                                <div class="list-group-item border-0 px-0 py-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ $activity->description ?? 'Activity logged' }}</strong>
+                                            <small class="text-muted d-block">
+                                                {{ $activity->details ?? 'No additional details' }}
                                             </small>
                                         </div>
                                         <div class="flex-shrink-0">
@@ -133,45 +112,48 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-muted mb-0">No recent activities found.</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                            <p class="text-muted mb-0">No recent activities found.</p>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
 
         <!-- Low Stock Alert -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-warning">Low Stock Alert</h6>
-                    <span class="badge badge-warning">{{ $lowStockProducts->count() }} items</span>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header py-2 px-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="mb-0 fw-semibold text-warning">Low Stock Alert</h6>
+                    <span class="badge bg-warning">{{ $lowStockProducts->count() ?? 0 }} items</span>
                 </div>
-                <div class="card-body">
-                    @if($lowStockProducts->count() > 0)
+                <div class="card-body p-3">
+                    @if(($lowStockProducts->count() ?? 0) > 0)
                         <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>Product</th>
-                                        <th class="text-center">Stock</th>
-                                        <th class="text-center">Min Level</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="py-2" style="font-size: 0.9rem;">Product</th>
+                                        <th class="text-center py-2" style="font-size: 0.9rem;">Stock</th>
+                                        <th class="text-center py-2" style="font-size: 0.9rem;">Min Level</th>
+                                        <th class="text-center py-2" style="font-size: 0.9rem;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($lowStockProducts as $product)
                                         <tr>
-                                            <td>
+                                            <td class="py-3">
                                                 <div class="fw-bold">{{ $product->name }}</div>
                                                 <small class="text-muted">{{ $product->sku }}</small>
                                             </td>
-                                            <td class="text-center">
-                                                <span class="badge badge-danger">{{ $product->stock_quantity }}</span>
+                                            <td class="text-center py-2">
+                                                <span class="badge bg-danger" style="font-size: 0.9rem;">{{ $product->stock_quantity }}</span>
                                             </td>
-                                            <td class="text-center">{{ $product->minimum_stock_level }}</td>
-                                            <td class="text-center">
+                                            <td class="text-center py-2" style="font-size: 1rem;">{{ $product->minimum_stock_level }}</td>
+                                            <td class="text-center py-2">
                                                 @if($product->auto_reorder)
-                                                    <span class="badge badge-success" title="Auto-reorder enabled">
+                                                    <span class="badge bg-success" title="Auto-reorder enabled">
                                                         <i class="fas fa-sync"></i>
                                                     </span>
                                                 @else
@@ -188,28 +170,16 @@
                     @else
                         <div class="text-center py-4">
                             <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                            <p class="text-muted mb-0">All products are well-stocked!</p>
+                            <h5 class="text-success mb-2">All products are well-stocked!</h5>
+                            <p class="text-muted mb-0">Your inventory levels are healthy.</p>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Notifications & Map Row -->
-    <div class="row">
-        <!-- Recent Notifications -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-info">Recent Notifications</h6>
-                    <a href="{{ route('inventory.notifications') }}" class="btn btn-sm btn-outline-info">View All</a>
-                </div>
-                <div class="card-body">
-                    @if($notifications->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($notifications as $notification)
-                                <div class="list-group-item border-0 px-0">
+</div>
+@endsection
                                     <div class="d-flex align-items-start">
                                         <div class="flex-shrink-0 me-3">
                                             <span class="text-{{ $notification->type_color }}">{{ $notification->type_icon }}</span>

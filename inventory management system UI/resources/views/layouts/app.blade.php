@@ -6,98 +6,436 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventory Management System')</title>
     
-    <!-- Bootstrap CSS -->
+    <!-- AWS Cloudscape Design System Styles -->
+    <link rel="stylesheet" href="https://d2u22qwz52vq8m.cloudfront.net/css/cloudscape-design-tokens/index.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Custom Styles -->
     @yield('styles')
     
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            /* AWS Design System Colors */
+            --aws-squid-ink: #232f3e;
+            --aws-orange: #ff9900;
+            --aws-light-blue: #146eb4;
+            --aws-dark-blue: #232f3d;
+            --aws-grey-100: #fafbfc;
+            --aws-grey-200: #f2f3f3;
+            --aws-grey-300: #e9ebed;
+            --aws-grey-400: #d5dbdb;
+            --aws-grey-500: #879596;
+            --aws-grey-600: #687078;
+            --aws-grey-700: #414b53;
+            --aws-grey-800: #2b3137;
+            --aws-grey-900: #161b1f;
+            
+            /* Status Colors */
+            --aws-green: #037f0c;
+            --aws-red: #d13313;
+            --aws-yellow: #8d6e00;
+            
+            /* Spacing */
+            --space-xxs: 2px;
+            --space-xs: 4px;
+            --space-s: 8px;
+            --space-m: 16px;
+            --space-l: 24px;
+            --space-xl: 32px;
+            --space-xxl: 48px;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: "Amazon Ember", "Helvetica Neue", "Roboto", "Arial", sans-serif;
+            background-color: var(--aws-grey-100);
             margin: 0;
             padding: 0;
-            font-size: 0.75rem;
-            line-height: 1.2;
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--aws-grey-900);
         }
         
+        /* AWS-style sidebar */
         .sidebar { 
-            background: var(--primary-gradient);
+            background: var(--aws-squid-ink);
             min-height: 100vh; 
             color: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 8px rgba(0,0,0,0.12);
             position: fixed;
             top: 0;
             left: 0;
-            width: 60px;
+            width: 64px;
             z-index: 1000;
-            transition: width 0.3s ease, box-shadow 0.3s ease;
+            transition: width 0.2s ease;
             overflow: hidden;
+            border-right: 1px solid var(--aws-grey-300);
         }
         
         .sidebar:hover {
-            width: 200px;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+            width: 240px;
+            box-shadow: 2px 0 16px rgba(0,0,0,0.15);
         }
         
-        .sidebar .p-3 {
-            padding: 0.5rem 0.5rem !important;
+        .sidebar .sidebar-brand {
+            padding: var(--space-m);
+            border-bottom: 1px solid var(--aws-grey-700);
+            display: flex;
+            align-items: center;
         }
         
-        .sidebar h4 {
-            margin-bottom: 1rem !important;
-            font-size: 0.9rem;
-            font-weight: 700;
-            white-space: nowrap;
+        .sidebar .sidebar-brand i {
+            color: var(--aws-orange);
+            font-size: 24px;
+            margin-right: var(--space-s);
+        }
+        
+        .sidebar .sidebar-brand span {
+            font-size: 16px;
+            font-weight: 600;
             opacity: 0;
-            transition: opacity 0.3s ease 0.1s;
+            transition: opacity 0.2s ease 0.1s;
         }
         
-        .sidebar:hover h4 {
+        .sidebar:hover .sidebar-brand span {
             opacity: 1;
         }
         
-        /* Tooltip for collapsed sidebar */
-        .sidebar:not(:hover) .nav-link {
-            position: relative;
-        }
-        
-        .sidebar:not(:hover) .nav-link:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 60px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            z-index: 1001;
-            pointer-events: none;
-        }
-        
+        /* AWS-style navigation */
         .nav-link { 
-            color: rgba(255,255,255,0.85) !important; 
-            padding: 0.5rem !important; 
-            border-radius: 4px; 
-            margin: 0.1rem 0; 
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.7rem;
+            color: #ffffff !important; 
+            padding: var(--space-s) var(--space-m) !important; 
+            border-radius: 0; 
+            margin: 0; 
+            transition: all 0.15s ease;
+            font-weight: 400;
+            font-size: 14px;
             display: flex;
             align-items: center;
             white-space: nowrap;
+            position: relative;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: var(--space-s);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .nav-link span {
+            opacity: 0;
+            transition: opacity 0.2s ease 0.1s;
+        }
+        
+        .sidebar:hover .nav-link span {
+            opacity: 1;
+        }
+        
+        .nav-link:hover, .nav-link.active { 
+            background-color: var(--aws-grey-800) !important;
+            color: var(--aws-orange) !important;
+            border-left-color: var(--aws-orange);
+        }
+        
+        .nav-link.active {
+            background-color: var(--aws-grey-700) !important;
+            border-left-color: var(--aws-orange);
+        }
+        
+        /* Tooltip for collapsed sidebar */
+        .sidebar:not(:hover) .nav-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--aws-grey-900);
+            color: white;
+            padding: var(--space-xs) var(--space-s);
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1001;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        
+        .sidebar:not(:hover) .nav-link:hover::after {
+            opacity: 1;
+        }
+        
+        /* Navigation groups */
+        .nav-group {
+            border-bottom: 1px solid var(--aws-grey-700);
+            margin-bottom: var(--space-s);
+            padding-bottom: var(--space-s);
+        }
+        
+        .nav-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .main-content {
+            margin-left: 64px;
+            min-height: 100vh;
+            transition: margin-left 0.2s ease;
+        }
+        
+        .content-wrapper {
+            padding: var(--space-l) var(--space-xl);
+            max-width: 100%;
+        }
+        
+        /* AWS-style cards */
+        .card { 
+            border: 1px solid var(--aws-grey-300);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            margin-bottom: var(--space-m);
+            background: white;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+        
+        .card-header { 
+            background: white;
+            color: var(--aws-grey-900);
+            border-bottom: 1px solid var(--aws-grey-300);
+            border-radius: 8px 8px 0 0 !important;
+            font-weight: 600;
+            padding: var(--space-m);
+            font-size: 16px;
+        }
+        
+        .card-body {
+            padding: var(--space-m);
+        }
+        
+        .card-title {
+            margin-bottom: var(--space-s);
+            font-weight: 600;
+            color: var(--aws-grey-900);
+            font-size: 16px;
+        }
+        
+        /* AWS-style buttons */
+        .btn { 
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            padding: var(--space-s) var(--space-m);
+            font-size: 14px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .btn-primary { 
+            background-color: var(--aws-orange);
+            border-color: var(--aws-orange);
+            color: white;
+        }
+        
+        .btn-primary:hover { 
+            background-color: #e88b00;
+            border-color: #e88b00;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            border-color: var(--aws-grey-400);
+            color: var(--aws-grey-900);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--aws-grey-100);
+            border-color: var(--aws-grey-500);
+        }
+        
+        .btn-success {
+            background-color: var(--aws-green);
+            border-color: var(--aws-green);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--aws-yellow);
+            border-color: var(--aws-yellow);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--aws-red);
+            border-color: var(--aws-red);
+            color: white;
+        }
+        
+        /* AWS-style page header */
+        .page-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-m);
+            border-bottom: 1px solid var(--aws-grey-300);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--aws-grey-900);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--aws-grey-600);
+        }
+        
+        /* AWS-style alerts */
+        .alert { 
+            border-radius: 4px;
+            border: 1px solid;
+            padding: var(--space-m);
+            margin-bottom: var(--space-m);
+        }
+        
+        .alert-success {
+            background-color: #f0f9f0;
+            border-color: #4caf50;
+            color: var(--aws-green);
+        }
+        
+        .alert-danger {
+            background-color: #fff5f5;
+            border-color: #f44336;
+            color: var(--aws-red);
+        }
+        
+        .alert-warning {
+            background-color: #fffdf0;
+            border-color: #ff9800;
+            color: var(--aws-yellow);
+        }
+        
+        /* AWS-style tables */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border: 1px solid var(--aws-grey-300);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table thead th {
+            background: var(--aws-grey-100);
+            color: var(--aws-grey-900);
+            border-bottom: 1px solid var(--aws-grey-300);
+            font-weight: 600;
+            padding: var(--space-m);
+            font-size: 14px;
+        }
+        
+        .table tbody td {
+            padding: var(--space-m);
+            border-bottom: 1px solid var(--aws-grey-200);
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--aws-grey-100);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* AWS-style form controls */
+        .form-control, .form-select {
+            border: 1px solid var(--aws-grey-400);
+            border-radius: 4px;
+            padding: var(--space-s) var(--space-s);
+            font-size: 14px;
+            transition: all 0.15s ease;
+            background: white;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--aws-orange);
+            box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.2);
+            outline: none;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--aws-grey-900);
+            margin-bottom: var(--space-xs);
+        }
+        
+        /* AWS-style badges */
+        .badge {
+            font-size: 12px;
+            font-weight: 500;
+            padding: var(--space-xs) var(--space-s);
+            border-radius: 4px;
+        }
+        
+        .badge-primary { 
+            background: var(--aws-orange); 
+            color: white;
+        }
+        
+        .badge-success { 
+            background: var(--aws-green); 
+            color: white;
+        }
+        
+        .badge-warning { 
+            background: var(--aws-yellow); 
+            color: white;
+        }
+        
+        .badge-danger { 
+            background: var(--aws-red); 
+            color: white;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: var(--space-m);
+            }
+            
+            .main-content {
+                margin-left: 64px;
+            }
+        }
+        
+        /* Loading states */
+        .loading-skeleton {
+            background: linear-gradient(90deg, var(--aws-grey-200) 25%, var(--aws-grey-100) 50%, var(--aws-grey-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
             overflow: hidden;
         }
         
@@ -650,45 +988,54 @@
     <div class="row g-0">
         <!-- Sidebar -->
         <div class="sidebar">
-            <div class="p-3">
-                <h4 class="text-center mb-4">
-                    <i class="fas fa-boxes"></i> 
-                    <span class="fw-bold">ISMS</span>
-                </h4>
-                <nav class="nav flex-column">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" data-tooltip="Dashboard">
-                        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
-                    </a>
+            <div class="sidebar-brand">
+                <i class="fas fa-warehouse"></i>
+                <span>Inventory MS</span>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" data-tooltip="Dashboard">
+                    <i class="fas fa-th-large"></i> <span>Dashboard</span>
+                </a>
+                
+                <div class="nav-group">
                     <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.dashboard') }}" data-tooltip="Inventory">
                         <i class="fas fa-warehouse"></i> <span>Inventory</span>
                     </a>
                     <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}" data-tooltip="Products">
-                        <i class="fas fa-box"></i> <span>Products</span>
+                        <i class="fas fa-boxes"></i> <span>Products</span>
                     </a>
+                    <a class="nav-link {{ request()->routeIs('inventory.map') ? 'active' : '' }}" href="{{ route('inventory.map') }}" data-tooltip="Live Tracking">
+                        <i class="fas fa-map-marked-alt"></i> <span>Live Tracking</span>
+                    </a>
+                </div>
+                
+                <div class="nav-group">
                     <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" href="{{ route('customers.index') }}" data-tooltip="Customers">
-                        <i class="fas fa-users"></i> <span>Customers</span>
+                        <i class="fas fa-user-friends"></i> <span>Customers</span>
                     </a>
                     <a class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}" data-tooltip="Suppliers">
-                        <i class="fas fa-truck"></i> <span>Suppliers</span>
+                        <i class="fas fa-truck-loading"></i> <span>Suppliers</span>
                     </a>
+                </div>
+                
+                <div class="nav-group">
                     <a class="nav-link {{ request()->routeIs('sales.*') ? 'active' : '' }}" href="{{ route('sales.index') }}" data-tooltip="Sales">
                         <i class="fas fa-shopping-cart"></i> <span>Sales</span>
                     </a>
                     <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" href="{{ route('purchases.index') }}" data-tooltip="Purchases">
                         <i class="fas fa-shopping-bag"></i> <span>Purchases</span>
                     </a>
-                    <hr class="text-white-50 my-3">
+                </div>
+                
+                <div class="nav-group">
                     <a class="nav-link {{ request()->routeIs('ai.*') ? 'active' : '' }}" href="{{ route('ai.predictions.index') }}" data-tooltip="AI Predictions">
-                        <i class="fas fa-robot"></i> <span>AI Predictions</span>
+                        <i class="fas fa-brain"></i> <span>AI Predictions</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('inventory.map') ? 'active' : '' }}" href="{{ route('inventory.map') }}" data-tooltip="Inventory Map">
-                        <i class="fas fa-map"></i> <span>Inventory Map</span>
+                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}" data-tooltip="Analytics">
+                        <i class="fas fa-chart-line"></i> <span>Analytics</span>
                     </a>
-                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}" data-tooltip="Reports">
-                        <i class="fas fa-chart-bar"></i> <span>Reports</span>
-                    </a>
-                </nav>
-            </div>
+                </div>
+            </nav>
         </div>
 
         <!-- Main Content -->

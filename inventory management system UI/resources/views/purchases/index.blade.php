@@ -5,49 +5,43 @@
 @section('content')
 <div class="container-fluid">
     <!-- Page Header -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Purchases Management</h4>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Purchases</li>
-                    </ol>
-                </div>
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-2 fw-semibold">🛒 Purchases Management</h2>
+                <p class="mb-0 text-muted">Track and manage your purchase orders</p>
+            </div>
+            <div class="btn-group">
+                <a href="{{ route('purchases.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> New Purchase
+                </a>
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
 
     <!-- Stats Cards -->
-    <div class="row">
+    <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Purchases</p>
-                            <h4 class="mb-2">{{ $totalPurchases ?? 0 }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+8.2%</span>from previous month</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-primary rounded-3">
-                                <i class="ri-shopping-bag-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-shopping-bag text-primary mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $totalPurchases ?? 0 }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Total Purchases</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+8.2% from last month</small>
                 </div>
             </div>
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Cost</p>
-                            <h4 class="mb-2">${{ number_format($totalCost ?? 0, 2) }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+6.8%</span>from previous month</p>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-dollar-sign text-success mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($totalCost ?? 0, 2) }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Total Cost</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+6.8% from last month</small>
                         </div>
                         <div class="avatar-sm">
                             <span class="avatar-title bg-light text-success rounded-3">
@@ -60,39 +54,23 @@
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Today's Purchases</p>
-                            <h4 class="mb-2">{{ $todayPurchases ?? 0 }}</h4>
-                            <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>+3.1%</span>from yesterday</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-info rounded-3">
-                                <i class="ri-calendar-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-calendar-alt text-info mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $todayPurchases ?? 0 }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Today's Purchases</p>
+                    <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+3.1% from yesterday</small>
                 </div>
             </div>
         </div>
         
         <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Average Purchase</p>
-                            <h4 class="mb-2">${{ number_format($averagePurchase ?? 0, 2) }}</h4>
-                            <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i>-1.3%</span>from previous month</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-warning rounded-3">
-                                <i class="ri-bar-chart-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-3 text-center">
+                    <i class="fas fa-chart-bar text-warning mb-2" style="font-size: 2rem;"></i>
+                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">${{ number_format($averagePurchase ?? 0, 2) }}</h2>
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">Average Purchase</p>
+                    <small class="text-danger"><i class="fas fa-arrow-down me-1"></i>-1.3% from previous month</small>
                 </div>
             </div>
         </div>
@@ -154,41 +132,41 @@
                         <table class="table table-striped table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Purchase ID</th>
-                                    <th>Supplier</th>
-                                    <th>Date</th>
-                                    <th>Total Amount</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Purchase ID</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Supplier</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Date</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Total Amount</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Status</th>
+                                    <th class="py-2 px-3" style="font-size: 0.9rem;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($purchases ?? [] as $purchase)
                                 <tr>
-                                    <td>
-                                        <strong>#{{ str_pad($purchase->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
+                                    <td class="py-2 px-3">
+                                        <strong style="font-size: 1.1rem;">#{{ str_pad($purchase->id ?? 0, 6, '0', STR_PAD_LEFT) }}</strong>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3">
                                         <div>
-                                            <strong>{{ $purchase->supplier->name ?? 'N/A' }}</strong>
+                                            <strong style="font-size: 1.1rem;">{{ $purchase->supplier->name ?? 'N/A' }}</strong>
                                             @if(isset($purchase->supplier->email))
                                                 <br><small class="text-muted">{{ $purchase->supplier->email }}</small>
                                             @endif
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3" style="font-size: 1rem;">
                                         {{ $purchase->created_at ? $purchase->created_at->format('M d, Y') : 'N/A' }}
                                         <br><small class="text-muted">{{ $purchase->created_at ? $purchase->created_at->format('h:i A') : '' }}</small>
                                     </td>
-                                    <td>
-                                        <strong class="text-danger">${{ number_format($purchase->total_amount ?? 0, 2) }}</strong>
+                                    <td class="py-2 px-3">
+                                        <strong class="text-danger" style="font-size: 1.2rem;">${{ number_format($purchase->total_amount ?? 0, 2) }}</strong>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-{{ ($purchase->status ?? 'pending') === 'completed' ? 'success' : (($purchase->status ?? 'pending') === 'pending' ? 'warning' : 'secondary') }}">
+                                    <td class="py-2 px-3">
+                                        <span class="badge bg-{{ ($purchase->status ?? 'pending') === 'completed' ? 'success' : (($purchase->status ?? 'pending') === 'pending' ? 'warning' : 'secondary') }}" style="font-size: 0.9rem;">
                                             {{ ucfirst($purchase->status ?? 'pending') }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="py-2 px-3">
                                         <div class="dropdown">
                                             <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Actions

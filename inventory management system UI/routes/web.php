@@ -77,6 +77,7 @@ Route::prefix('ai')->name('ai.')->group(function () {
     // Prediction Dashboard
     Route::get('/predictions', [AIPredictionController::class, 'index'])->name('predictions.index');
     Route::get('/predictions/create', [AIPredictionController::class, 'create'])->name('predictions.create');
+    Route::get('/predictions/export', [AIPredictionController::class, 'export'])->name('predictions.export');
     Route::post('/predict', [AIPredictionController::class, 'predict'])->name('predict');
     Route::post('/bulk-predict', [AIPredictionController::class, 'bulkPredict'])->name('bulk-predict');
     
@@ -97,4 +98,10 @@ Route::prefix('api')->name('api.')->group(function () {
     
     // AI API endpoints
     Route::get('/ai/health', [AIPredictionController::class, 'healthCheck'])->name('ai.health');
+});
+
+// Inventory Routes
+Route::prefix('inventory')->name('inventory.')->group(function () {
+    Route::get('/dashboard', [InventoryController::class, 'dashboard'])->name('dashboard');
+    Route::get('/map', [InventoryController::class, 'map'])->name('map');
 });
