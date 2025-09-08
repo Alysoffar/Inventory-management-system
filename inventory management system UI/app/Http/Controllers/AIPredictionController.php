@@ -29,10 +29,26 @@ class AIPredictionController extends Controller
         $totalPredictions = count($recentPredictions);
         $averageAccuracy = 85.5; // Sample accuracy
         
+        // Get reorder recommendations
+        $reorderRecommendations = count($this->getReorderRecommendations());
+        
+        // Get high risk predictions count
+        $highRiskPredictions = 3; // Sample count of high risk predictions
+        
+        // Risk statistics breakdown
+        $riskStats = [
+            'high' => 3,
+            'medium' => 7,
+            'low' => 15
+        ];
+        
         return view('ai.predictions.index', compact(
             'recentPredictions', 
             'totalPredictions', 
-            'averageAccuracy'
+            'averageAccuracy',
+            'reorderRecommendations',
+            'highRiskPredictions',
+            'riskStats'
         ));
     }
     
@@ -358,6 +374,36 @@ class AIPredictionController extends Controller
                 'confidence' => 'HIGH',
                 'date' => Carbon::now()->subDays(3)->format('Y-m-d'),
                 'status' => 'Completed'
+            ]
+        ];
+    }
+    
+    /**
+     * Get reorder recommendations
+     */
+    private function getReorderRecommendations()
+    {
+        return [
+            [
+                'product_name' => 'Widget A',
+                'current_stock' => 15,
+                'recommended_quantity' => 100,
+                'priority' => 'HIGH',
+                'reason' => 'Low inventory, high sales velocity'
+            ],
+            [
+                'product_name' => 'Widget B',
+                'current_stock' => 25,
+                'recommended_quantity' => 75,
+                'priority' => 'MEDIUM',
+                'reason' => 'Moderate inventory levels'
+            ],
+            [
+                'product_name' => 'Widget C',
+                'current_stock' => 8,
+                'recommended_quantity' => 150,
+                'priority' => 'URGENT',
+                'reason' => 'Critical low stock'
             ]
         ];
     }
