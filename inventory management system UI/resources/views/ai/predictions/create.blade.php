@@ -168,7 +168,7 @@
 
                     <!-- Submit Button -->
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
+                        <button type="submit" class="btn btn-primary btn-lg" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                             <i class="fas fa-magic me-2"></i>Generate AI Prediction
                         </button>
                         <button type="button" class="btn btn-outline-secondary btn-lg ms-2" onclick="resetForm()">

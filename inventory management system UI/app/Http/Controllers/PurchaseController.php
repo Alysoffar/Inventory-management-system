@@ -12,35 +12,43 @@ class PurchaseController extends Controller
 {
     public function index(Request $request)
     {
-        // Build the query with supplier relationship
-        $query = Purchase::with(['supplier']);
+        // Build the query with supplier relationship only
+        $query = Purchase::with(['supplier', 'purchaseItems' => function($query) {
+            $query->with('product');
+        }]);
         
         // Apply filters
         if ($request->filled('date_from')) {
-            $query->whereDate('created_at', '>=', $request->date_from);
+            $query->whereDate('order_date', '>=', $request->date_from);
         }
         
         if ($request->filled('date_to')) {
-            $query->whereDate('created_at', '<=', $request->date_to);
+            $query->whereDate('order_date', '<=', $request->date_to);
         }
         
         if ($request->filled('supplier')) {
             $query->where('supplier_id', $request->supplier);
         }
         
-        // Search functionality
-        if ($request->has('search')) {
-            $search = $request->get('search');
-            $query->whereHas('supplier', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
         
-        // Get paginated purchases
-        $purchases = $query->orderBy('created_at', 'desc')->paginate(10);
+        // Search functionality - removed the problematic orWhereHas that causes duplicates
+        if ($request->has('search') && !empty($request->get('search'))) {
+            $search = $request->get('search');
+            $query->whereHas('supplier', function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        // Get paginated purchases - removed distinct() as it wasn't working properly
+        $purchases = $query->orderBy('order_date', 'desc')->paginate(10);
         
         // Calculate statistics
         $totalPurchases = Purchase::count();
         $totalCost = Purchase::sum('total_amount') ?? 0;
-        $todayPurchases = Purchase::whereDate('created_at', today())->count();
+        $todayPurchases = Purchase::whereDate('order_date', today())->count();
         $averagePurchase = $totalPurchases > 0 ? $totalCost / $totalPurchases : 0;
         
         // Get suppliers for filter dropdown
@@ -66,27 +74,52 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
             'supplier_id' => 'required|exists:suppliers,id',
-            'quantity' => 'required|integer|min:1',
-            'unit_cost' => 'required|numeric|min:0',
-            'purchase_date' => 'required|date'
+            'order_date' => 'required|date',
+            'expected_date' => 'nullable|date',
+            'status' => 'required|in:pending,ordered,received,cancelled',
+            'notes' => 'nullable|string',
+            'products' => 'required|array|min:1',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
+            'products.*.unit_cost' => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($validated) {
-            $totalCost = $validated['unit_cost'] * $validated['quantity'];
-            Purchase::create([
-                'product_id' => $validated['product_id'],
+            // Calculate total amount
+            $totalAmount = 0;
+            foreach ($validated['products'] as $product) {
+                $totalAmount += $product['quantity'] * $product['unit_cost'];
+            }
+
+            // Create the purchase order
+            $purchase = Purchase::create([
                 'supplier_id' => $validated['supplier_id'],
-                'quantity' => $validated['quantity'],
-                'unit_cost' => $validated['unit_cost'],
-                'total_cost' => $totalCost,
-                'purchase_date' => $validated['purchase_date']
+                'total_amount' => $totalAmount,
+                'status' => $validated['status'],
+                'order_date' => $validated['order_date'],
+                'expected_date' => $validated['expected_date'] ?? null,
+                'notes' => $validated['notes'] ?? null,
             ]);
-            Product::findOrFail($validated['product_id'])->increment('quantity', $validated['quantity']);
+
+            // Create purchase items for each product
+            foreach ($validated['products'] as $productData) {
+                $purchase->purchaseItems()->create([
+                    'product_id' => $productData['product_id'],
+                    'quantity' => $productData['quantity'],
+                    'unit_price' => $productData['unit_cost'],
+                    'total_price' => $productData['quantity'] * $productData['unit_cost'],
+                ]);
+
+                // Update product stock if status is received
+                if ($validated['status'] === 'received') {
+                    Product::findOrFail($productData['product_id'])
+                        ->increment('quantity', $productData['quantity']);
+                }
+            }
         });
 
-        return redirect()->route('purchases.index')->with('success', 'Purchase recorded successfully!');
+        return redirect()->route('purchases.index')->with('success', 'Purchase order created successfully!');
     }
 
     public function show(Purchase $purchase)

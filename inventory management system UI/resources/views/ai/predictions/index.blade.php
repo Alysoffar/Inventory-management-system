@@ -33,7 +33,7 @@
                 <i class="fas fa-brain fa-2x mb-3"></i>
                 <h3 id="model-accuracy">{{ number_format($averageAccuracy, 1) }}%</h3>
                 <p>Model Accuracy</p>
-                <small class="text-light">Based on historical data</small>
+                <small class="text-dark">Based on historical data</small>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
                 <i class="fas fa-chart-line fa-2x mb-3"></i>
                 <h3>{{ $totalPredictions }}</h3>
                 <p>Total Predictions</p>
-                <small class="text-light">This month</small>
+                <small class="text-dark">This month</small>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                     <span class="spinner-border spinner-border-sm" role="status"></span>
                 </h3>
                 <p>API Status</p>
-                <small class="text-light">Real-time monitoring</small>
+                <small class="text-dark">Real-time monitoring</small>
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@
                 <i class="fas fa-clock fa-2x mb-3"></i>
                 <h3>~2.5s</h3>
                 <p>Avg Response Time</p>
-                <small class="text-light">Lightning fast predictions</small>
+                <small class="text-dark">Lightning fast predictions</small>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
                             <input type="number" class="form-control" name="expected_demand" value="120" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">
+                            <button type="submit" class="btn btn-primary w-100" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                                 <i class="fas fa-magic me-1"></i>Predict
                             </button>
                         </div>

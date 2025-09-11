@@ -3,6 +3,241 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<style>
+/* 3D Bouncing Greeting Animation */
+.greeting-container {
+    margin-bottom: 2rem;
+    text-align: center;
+    perspective: 1000px;
+}
+
+.greeting-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: inline-block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    animation: bounce3D 2s ease-in-out infinite;
+    transform-style: preserve-3d;
+}
+
+.greeting-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shine 3s infinite;
+}
+
+.greeting-message .wave {
+    display: inline-block;
+    animation: wave 1.5s ease-in-out infinite;
+}
+
+.greeting-message .wave:nth-child(2) { animation-delay: 0.1s; }
+.greeting-message .wave:nth-child(3) { animation-delay: 0.2s; }
+.greeting-message .wave:nth-child(4) { animation-delay: 0.3s; }
+.greeting-message .wave:nth-child(5) { animation-delay: 0.4s; }
+.greeting-message .wave:nth-child(6) { animation-delay: 0.5s; }
+.greeting-message .wave:nth-child(7) { animation-delay: 0.6s; }
+.greeting-message .wave:nth-child(8) { animation-delay: 0.7s; }
+
+/* Welcome Message Popup Animation */
+.welcome-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 3rem 4rem;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 9999;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    animation: popupBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    max-width: 90vw;
+}
+
+.welcome-popup::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff6b6b);
+    border-radius: 25px;
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9998;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes popupBounce {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1) rotate(-10deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes bounce3D {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) rotateX(0deg) rotateY(0deg);
+    }
+    40% {
+        transform: translateY(-30px) rotateX(10deg) rotateY(5deg);
+    }
+    60% {
+        transform: translateY(-15px) rotateX(-5deg) rotateY(-3deg);
+    }
+}
+
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: initial;
+    }
+    30% {
+        transform: translateY(-15px) scale(1.1);
+    }
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+.greeting-subtitle {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #6c757d;
+    font-weight: 500;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .greeting-message {
+        font-size: 1.8rem;
+        padding: 1.5rem 2rem;
+    }
+    
+    .greeting-subtitle {
+        font-size: 1rem;
+    }
+    
+    .welcome-popup {
+        font-size: 1.5rem;
+        padding: 2rem 3rem;
+        letter-spacing: 2px;
+    }
+}
+</style>
+
+@if(session('welcome_message'))
+<!-- Welcome Popup -->
+<div class="popup-overlay" onclick="closeWelcomePopup()"></div>
+<div class="welcome-popup" id="welcomePopup">
+    {{ session('welcome_message') }}
+    <div style="margin-top: 1rem; font-size: 1rem; font-weight: 400; letter-spacing: 1px; opacity: 0.9;">
+        Click anywhere to continue
+    </div>
+</div>
+
+<script>
+function closeWelcomePopup() {
+    const popup = document.getElementById('welcomePopup');
+    const overlay = document.querySelector('.popup-overlay');
+    
+    popup.style.animation = 'popupBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) reverse forwards';
+    overlay.style.animation = 'fadeIn 0.3s ease reverse forwards';
+    
+    setTimeout(() => {
+        popup.remove();
+        overlay.remove();
+    }, 500);
+}
+
+// Auto close after 5 seconds
+setTimeout(() => {
+    if (document.getElementById('welcomePopup')) {
+        closeWelcomePopup();
+    }
+}, 5000);
+</script>
+@endif
+
+<!-- 3D Greeting Message -->
+<div class="greeting-container">
+    <div class="greeting-message">
+        @auth
+            <span class="wave">H</span><span class="wave">E</span><span class="wave">L</span><span class="wave">L</span><span class="wave">O</span> 
+            <span class="wave">{{ strtoupper(Auth::user()->name ?? 'USER') }}</span>
+        @else
+            <span class="wave">W</span><span class="wave">E</span><span class="wave">L</span><span class="wave">C</span><span class="wave">O</span><span class="wave">M</span><span class="wave">E</span>
+        @endauth
+    </div>
+    <div class="greeting-subtitle">
+        Welcome back to your Inventory Management System
+    </div>
+</div>
+
 <!-- Page Header -->
 <div class="mb-4">
     <h2 class="mb-2 fw-semibold">
@@ -43,16 +278,50 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-3 text-center">
-                    <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
-                    <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $lowStockCount }}</h2>
-                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">Low Stock</p>
+        @auth
+            @if(auth()->user()->role === 'admin' || auth()->user()->email === 'alysoffar06@gmail.com')
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-3 text-center">
+                            @if($pendingUsersCount > 0)
+                                <i class="fas fa-user-clock text-warning mb-2" style="font-size: 2rem;"></i>
+                                <h2 class="mb-1 fw-bold text-warning" style="font-size: 2rem;">{{ $pendingUsersCount }}</h2>
+                                <p class="mb-0 text-muted" style="font-size: 0.9rem;">
+                                    <a href="{{ route('admin.pending-users') }}" class="text-decoration-none">
+                                        Pending Approvals
+                                    </a>
+                                </p>
+                            @else
+                                <i class="fas fa-user-check text-success mb-2" style="font-size: 2rem;"></i>
+                                <h2 class="mb-1 fw-bold text-success" style="font-size: 2rem;">0</h2>
+                                <p class="mb-0 text-muted" style="font-size: 0.9rem;">All Users Approved</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-3 text-center">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                            <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $lowStockCount }}</h2>
+                            <p class="mb-0 text-muted" style="font-size: 0.9rem;">Low Stock</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @else
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-3 text-center">
+                        <i class="fas fa-exclamation-triangle text-warning mb-2" style="font-size: 2rem;"></i>
+                        <h2 class="mb-1 fw-bold" style="font-size: 2rem;">{{ $lowStockCount }}</h2>
+                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">Low Stock</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        @endauth
     </div>
-</div>
 
 <!-- Today's Sales Card -->
 <div class="row g-3 mb-3">

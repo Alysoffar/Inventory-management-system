@@ -2,32 +2,40 @@
 /node_modules
 /vendor
 
-# Laravel specific
-/bootstrap/compiled.php
+# Environment
 .env
 .env.*
 !.env.example
 
-# Storage
-/storage/*.key
-/storage/app/*
+# Storage & Cache
+/storage/app/public/*
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/views/*
 /storage/logs/*
+/bootstrap/cache/*
+
+# Keep directory structure
 !storage/app/.gitkeep
 !storage/app/public/.gitkeep
 !storage/framework/.gitkeep
 !storage/framework/cache/.gitkeep
-!storage/framework/cache/data/.gitkeep
 !storage/framework/sessions/.gitkeep
-!storage/framework/testing/.gitkeep
 !storage/framework/views/.gitkeep
 !storage/logs/.gitkeep
+!bootstrap/cache/.gitkeep
 
 # Compiled assets
 /public/hot
 /public/storage
+
+# Development
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
 /public/css/app.css
 /public/js/app.js
 /public/mix-manifest.json

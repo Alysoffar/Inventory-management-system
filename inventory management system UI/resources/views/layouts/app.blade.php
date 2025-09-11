@@ -53,9 +53,55 @@
             background-color: var(--aws-grey-100);
             margin: 0;
             padding: 0;
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 16px; /* Increased from 14px */
+            line-height: 1.5; /* Increased from 1.4 */
             color: var(--aws-grey-900);
+        }
+        
+        /* Increase font sizes globally */
+        .card-body {
+            font-size: 16px;
+        }
+        
+        .table {
+            font-size: 15px;
+        }
+        
+        .btn {
+            font-size: 15px;
+            padding: 8px 16px;
+        }
+        
+        h1, .h1 { font-size: 2.5rem; }
+        h2, .h2 { font-size: 2rem; }
+        h3, .h3 { font-size: 1.75rem; }
+        h4, .h4 { font-size: 1.5rem; }
+        h5, .h5 { font-size: 1.25rem; }
+        h6, .h6 { font-size: 1.1rem; }
+        
+        .small { font-size: 14px; }
+        
+        .form-control, .form-select {
+            font-size: 15px;
+            padding: 10px 12px;
+        }
+        
+        /* Force dark text in cards */
+        .card {
+            color: #212529 !important;
+        }
+        
+        .card-body h1, .card-body h2, .card-body h3, .card-body h4, .card-body h5, .card-body h6,
+        .card-header h1, .card-header h2, .card-header h3, .card-header h4, .card-header h5, .card-header h6 {
+            color: #212529 !important;
+        }
+        
+        .card-body p, .card-header p, .card-body span, .card-header span {
+            color: #212529 !important;
+        }
+        
+        .card-body .text-muted {
+            color: #6c757d !important;
         }
         
         /* AWS-style sidebar */
@@ -168,6 +214,47 @@
         
         .sidebar:not(:hover) .nav-link:hover::after {
             opacity: 1;
+        }
+        
+        /* Logout button styling */
+        .logout-btn {
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: var(--space-s) var(--space-m) !important;
+            color: rgba(255,255,255,0.9) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: all 0.15s ease !important;
+            border-radius: 4px !important;
+            margin: 2px 0 !important;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.15) !important; 
+            color: white !important;
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .logout-btn i {
+            width: 20px !important;
+            text-align: center !important;
+            margin-right: var(--space-s) !important;
+            font-size: 14px !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .logout-btn span {
+            opacity: 0 !important;
+            transition: opacity 0.15s ease !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+        }
+        
+        .sidebar:hover .logout-btn span {
+            opacity: 1 !important;
         }
         
         /* Navigation groups */
@@ -1034,6 +1121,27 @@
                     <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}" data-tooltip="Analytics">
                         <i class="fas fa-chart-line"></i> <span>Analytics</span>
                     </a>
+                </div>
+                
+                @auth
+                    @if(auth()->user()->role === 'admin' || auth()->user()->email === 'alysoffar06@gmail.com')
+                        <div class="nav-group">
+                            <a class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}" href="{{ route('admin.pending-users') }}" data-tooltip="Admin Panel">
+                                <i class="fas fa-user-shield"></i> <span>Admin Panel</span>
+                            </a>
+                        </div>
+                    @endif
+                @endauth
+                
+                <div class="nav-group">
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="nav-link logout-btn" data-tooltip="Logout" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                            </button>
+                        </form>
+                    @endauth
                 </div>
             </nav>
         </div>

@@ -3,13 +3,141 @@
 @section('title', 'Customers')
 
 @section('content')
-<div class="container-fluid">
+<style>
+/* AWS Cloudscape Design System - Customers Management */
+:root {
+    --aws-color-blue-600: #146eb4;
+    --aws-color-blue-700: #0972d3;
+    --aws-color-grey-900: #16191f;
+    --aws-color-grey-600: #5f6b7a;
+    --aws-color-grey-200: #e9ebed;
+    --aws-color-green-600: #037f0c;
+    --aws-color-orange-600: #b7740e;
+    --aws-color-red-600: #d13212;
+}
+
+.customers-management .card {
+    border: 1px solid var(--aws-color-grey-200);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.customers-management .card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.customers-management .card-header {
+    background: #f8f9fc;
+    border-bottom: 1px solid var(--aws-color-grey-200);
+    padding: 1.5rem;
+}
+
+.customers-management .card-body {
+    padding: 0;
+}
+
+.customers-management .page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #212529 !important;
+    margin-bottom: 8px;
+}
+
+.customers-management .page-subtitle {
+    font-size: 1.1rem;
+    color: #212529 !important;
+    margin: 0;
+}
+
+.customers-management .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #212529 !important;
+    margin: 0;
+}
+
+.customers-management .btn {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 6px;
+}
+
+.customers-management .form-control {
+    font-size: 1rem;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--aws-color-grey-200);
+}
+
+.customers-management th {
+    font-size: 1rem !important;
+    font-weight: 600;
+    color: #212529 !important;
+    padding: 1rem 1rem !important;
+    background: #f8f9fc;
+    border-bottom: 1px solid var(--aws-color-grey-200);
+}
+
+.customers-management td {
+    font-size: 1.1rem !important;
+    color: #212529 !important;
+    padding: 1rem 1rem !important;
+    border-bottom: 1px solid #f8f9fc;
+}
+
+.customers-management .badge {
+    font-size: 1rem;
+    padding: 6px 12px;
+}
+
+.customers-management .btn-sm {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+}
+
+.customers-management h1, .customers-management h2, .customers-management h3, .customers-management h4, .customers-management h5, .customers-management h6,
+.customers-management p, .customers-management span, .customers-management div, .customers-management a, .customers-management li {
+    color: #212529 !important;
+}
+
+.customers-management .text-muted {
+    color: #5f6b7a !important;
+}
+
+.customers-management .empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.customers-management .empty-state i {
+    font-size: 4rem;
+    color: #5f6b7a;
+    margin-bottom: 2rem;
+}
+
+.customers-management .empty-state h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529 !important;
+    margin-bottom: 1rem;
+}
+
+.customers-management .empty-state p {
+    font-size: 1.1rem;
+    color: #5f6b7a !important;
+    margin-bottom: 2rem;
+}
+</style>
+
+<div class="container-fluid customers-management">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="mb-2 fw-semibold">👥 Customers Management</h2>
-                    <p class="mb-0 text-muted">Manage your customer database</p>
+                    <h2 class="page-title">👥 Customers Management</h2>
+                    <p class="page-subtitle">Manage your customer database</p>
                 </div>
                 <a href="{{ route('customers.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i> Add New Customer
@@ -18,57 +146,57 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-header py-2 px-3">
+    <div class="card">
+        <div class="card-header">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h6 class="mb-0 fw-semibold">All Customers</h6>
+                    <h6 class="card-title">All Customers</h6>
                 </div>
                 <div class="col-md-6">
                     <form method="GET" action="{{ route('customers.index') }}" class="d-flex">
-                        <input type="text" name="search" class="form-control me-2"
+                        <input type="text" name="search" class="form-control me-3"
                                placeholder="Search customers..." value="{{ request('search') }}">
-                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                        <button type="submit" class="btn btn-outline-primary">
                             <i class="fas fa-search me-2"></i> Search
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="table-light">
+                    <thead>
                         <tr>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">ID</th>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">Name</th>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">Email</th>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">Phone</th>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">Total Orders</th>
-                            <th class="py-2 px-3" style="font-size: 0.9rem;">Actions</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Total Orders</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($customers as $customer)
                         <tr>
-                            <td class="py-2 px-3" style="font-size: 1rem;">{{ $customer->id }}</td>
-                            <td class="py-2 px-3">
-                                <strong style="font-size: 1.1rem;">{{ $customer->name }}</strong>
+                            <td>{{ $customer->id }}</td>
+                            <td>
+                                <strong>{{ $customer->name }}</strong>
                             </td>
-                            <td class="py-2 px-3" style="font-size: 1rem;">{{ $customer->email }}</td>
-                            <td class="py-2 px-3" style="font-size: 1rem;">{{ $customer->phone }}</td>
-                            <td class="py-2 px-3">
-                                <span class="badge bg-info" style="font-size: 0.9rem;">{{ $customer->sales_count ?? 0 }}</span>
+                            <td>{{ $customer->email }}</td>
+                            <td>{{ $customer->phone }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ $customer->sales_count ?? 0 }}</span>
                             </td>
-                                                        <td class="py-2 px-3">
+                            <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('customers.show', $customer->id) }}" 
                                        class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-eye" style="font-size: 0.8rem;"></i>
+                                        <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="{{ route('customers.edit', $customer->id) }}" 
                                        class="btn btn-sm btn-outline-warning">
-                                        <i class="fas fa-edit" style="font-size: 0.8rem;"></i>
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('customers.destroy', $customer->id) }}" 
                                           style="display: inline;" 
@@ -76,7 +204,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash" style="font-size: 0.8rem;"></i>
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -84,11 +212,11 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center py-5">
-                                <div class="text-center">
-                                    <i class="fas fa-users fa-3x text-muted mb-4"></i>
-                                    <h4 class="text-muted mb-3">No customers found</h4>
-                                    <p class="text-muted mb-4">Start by adding your first customer to the system.</p>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fas fa-users"></i>
+                                    <h4>No customers found</h4>
+                                    <p>Start by adding your first customer to the system.</p>
                                     <a href="{{ route('customers.create') }}" class="btn btn-primary">
                                         <i class="fas fa-plus me-2"></i> Add First Customer
                                     </a>

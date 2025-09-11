@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -22,6 +23,9 @@ class DashboardController extends Controller
         
         // Low stock count - Required for dashboard view
         $lowStockCount = 8; // Example data - items with quantity below threshold
+        
+        // Pending users count for admin
+        $pendingUsersCount = User::where('status', 'pending')->count();
         
         // Low stock products - Replace with actual collection when models are ready
         $lowStockProducts = collect([
@@ -93,7 +97,8 @@ class DashboardController extends Controller
             'lowStockProducts',
             'recentSales',
             'recentPurchases',
-            'monthlyRevenue'
+            'monthlyRevenue',
+            'pendingUsersCount'
         ));
     }
     

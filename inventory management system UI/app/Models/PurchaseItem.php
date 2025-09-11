@@ -13,14 +13,14 @@ class PurchaseItem extends Model
         'purchase_id',
         'product_id',
         'quantity',
-        'unit_cost',
-        'total_cost'
+        'unit_price',
+        'total_price'
     ];
 
     protected $casts = [
         'quantity' => 'integer',
-        'unit_cost' => 'decimal:2',
-        'total_cost' => 'decimal:2'
+        'unit_price' => 'decimal:2',
+        'total_price' => 'decimal:2'
     ];
 
     public function purchase()

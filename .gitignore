@@ -1,52 +1,88 @@
 # ===================================
-# INVENTORY MANAGEMENT SYSTEM .GITIGNORE
+# AI-POWERED INVENTORY MANAGEMENT SYSTEM
 # ===================================
-# Optimized for Laravel + AI/ML hybrid project
-# Only excludes files NOT required for running the system
+# Optimized .gitignore for easy pull-and-run setup
 
 # ===================================
-# ENVIRONMENT & CONFIGURATION FILES
+# ENVIRONMENT & SECRETS
 # ===================================
-# These contain sensitive data and should be configured locally
 .env
-.env.local
-.env.production
-.env.staging
-*.env
-
-# Keep example files for setup guidance
+.env.*
 !.env.example
 
 # ===================================
-# DEPENDENCY DIRECTORIES
+# DEPENDENCIES (Regeneratable)
 # ===================================
-# These are large and can be regenerated from lock files
-
-# Python dependencies
+# Python
 .venv/
 venv/
 __pycache__/
 *.py[cod]
-*$py.class
 *.egg-info/
 
-# Laravel PHP dependencies
-inventory\ management\ system\ UI/vendor/
+# Laravel PHP
+vendor/
+*/vendor/
 
-# Node.js dependencies
-inventory\ management\ system\ UI/node_modules/
-inventory\ management\ system\ UI/npm-debug.log*
-inventory\ management\ system\ UI/yarn-error.log
+# Node.js
+node_modules/
+*/node_modules/
 
 # ===================================
-# GENERATED/COMPILED FILES
+# GENERATED/CACHE FILES
 # ===================================
-# These are built from source and can be regenerated
+# Laravel
+storage/app/public/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+bootstrap/cache/
+public/hot
+public/storage
 
-# Laravel compiled assets
-inventory\ management\ system\ UI/public/hot
-inventory\ management\ system\ UI/public/storage
-inventory\ management\ system\ UI/public/mix-manifest.json
+# Python
+*.pyc
+*.pyo
+*.pyd
+
+# ===================================
+# DEVELOPMENT TOOLS
+# ===================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ===================================
+# RUNTIME/OUTPUT FILES
+# ===================================
+*.log
+*.pid
+*.seed
+*.coverage
+
+# ===================================
+# AI MODEL OUTPUTS (Keep trained models)
+# ===================================
+# Keep the trained models but ignore temporary outputs
+models/*.tmp
+models/temp_*
+
+# ===================================
+# DATABASE FILES
+# ===================================
+# Keep SQLite for development but ignore backups
+*.sqlite-journal
+*.db-backup
+
+# ===================================
+# DOCUMENTATION BUILDS
+# ===================================
+docs/_build/
 
 # Python compiled files
 *.pyc
