@@ -14,10 +14,10 @@
         </div>
         <div class="col-md-4 text-end">
             <div class="btn-group">
-                <a href="{{ route('ai.predictions.create') }}" class="btn btn-primary">
+                <a href="{{ route('ai.predictions.create') }}" class="btn btn-primary" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                     <i class="fas fa-plus me-2"></i>New Prediction
                 </a>
-                <a href="{{ route('ai.insights') }}" class="btn btn-success">
+                <a href="{{ route('ai.insights') }}" class="btn btn-success" style="background-color: #198754; border-color: #198754; color: white;">
                     <i class="fas fa-lightbulb me-2"></i>AI Insights
                 </a>
             </div>
@@ -89,9 +89,15 @@
                             <label class="form-label">Product</label>
                             <select class="form-select" name="product_id" required>
                                 <option value="">Select Product...</option>
-                                <option value="1">Sample Product A</option>
-                                <option value="2">Sample Product B</option>
-                                <option value="3">Sample Product C</option>
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" 
+                                            data-name="{{ $product->name }}"
+                                            data-category="{{ $product->category }}"
+                                            data-price="{{ $product->price }}"
+                                            data-stock="{{ $product->quantity }}">
+                                        {{ $product->name }} ({{ $product->category }})
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -103,7 +109,7 @@
                             <input type="number" class="form-control" name="expected_demand" value="120" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
+                            <button type="submit" class="btn btn-dark w-100" style="background-color: #000000; border-color: #000000; color: white;">
                                 <i class="fas fa-magic me-1"></i>Predict
                             </button>
                         </div>
@@ -175,10 +181,10 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title"><i class="fas fa-history me-2"></i>Recent Predictions</h5>
                 <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" onclick="refreshPredictions()">
+                    <button class="btn btn-outline-dark" onclick="refreshPredictions()" style="color: #000000; border-color: #000000;">
                         <i class="fas fa-sync-alt"></i>
                     </button>
-                    <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-success">
+                    <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-dark" style="color: #000000; border-color: #000000;">
                         <i class="fas fa-plus"></i> New
                     </a>
                 </div>
@@ -216,10 +222,10 @@
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary btn-sm" title="View Details">
+                                            <button class="btn btn-outline-dark btn-sm" title="View Details" style="color: #000000; border-color: #000000;">
                                                 <i class="fas fa-eye"></i>
                                             </button>
-                                            <button class="btn btn-outline-success btn-sm" title="Regenerate">
+                                            <button class="btn btn-outline-dark btn-sm" title="Regenerate" style="color: #000000; border-color: #000000;">
                                                 <i class="fas fa-redo"></i>
                                             </button>
                                         </div>
@@ -234,7 +240,7 @@
                         <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">No predictions yet</h5>
                         <p class="text-muted">Start by creating your first AI-powered inventory prediction</p>
-                        <a href="{{ route('ai.predictions.create') }}" class="btn btn-primary">
+                        <a href="{{ route('ai.predictions.create') }}" class="btn btn-primary" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                             <i class="fas fa-plus me-2"></i>Create First Prediction
                         </a>
                     </div>
@@ -252,7 +258,7 @@
                 <i class="fas fa-magic fa-3x text-primary mb-3"></i>
                 <h5>Smart Forecasting</h5>
                 <p class="text-muted">LSTM neural networks analyze complex patterns in your inventory data</p>
-                <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-primary">Try Now</a>
+                <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-primary" style="color: #0d6efd; border-color: #0d6efd;">Try Now</a>
             </div>
         </div>
     </div>
@@ -263,7 +269,7 @@
                 <i class="fas fa-lightbulb fa-3x text-success mb-3"></i>
                 <h5>Business Intelligence</h5>
                 <p class="text-muted">Get actionable recommendations to optimize your inventory strategy</p>
-                <a href="{{ route('ai.insights') }}" class="btn btn-outline-success">View Insights</a>
+                <a href="{{ route('ai.insights') }}" class="btn btn-outline-success" style="color: #198754; border-color: #198754;">View Insights</a>
             </div>
         </div>
     </div>
@@ -274,7 +280,7 @@
                 <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
                 <h5>Risk Management</h5>
                 <p class="text-muted">Identify potential stockouts and overstock situations before they happen</p>
-                <button class="btn btn-outline-warning" onclick="showRiskAnalysis()">Learn More</button>
+                <button class="btn btn-outline-warning" onclick="showRiskAnalysis()" style="color: #ffc107; border-color: #ffc107;">Learn More</button>
             </div>
         </div>
     </div>
@@ -291,6 +297,25 @@ $(document).ready(function() {
     $('#quick-prediction-form').on('submit', function(e) {
         e.preventDefault();
         makeQuickPrediction();
+    });
+    
+    // Auto-populate form when product is selected
+    $('select[name="product_id"]').on('change', function() {
+        const selectedOption = $(this).find('option:selected');
+        
+        if (selectedOption.val()) {
+            const stock = selectedOption.data('stock') || 0;
+            const price = selectedOption.data('price') || 0;
+            
+            // Auto-populate current stock from database
+            $('input[name="current_stock"]').val(stock);
+            
+            // Store price for the prediction request
+            $(this).closest('form').data('product-price', price);
+        } else {
+            $('input[name="current_stock"]').val('');
+            $(this).closest('form').removeData('product-price');
+        }
     });
 });
 
@@ -313,7 +338,12 @@ function checkApiStatus() {
 
 function makeQuickPrediction() {
     const formData = new FormData(document.getElementById('quick-prediction-form'));
-    formData.append('price', '25.50'); // Default price
+    
+    // Get the actual product price from the selected option
+    const selectedOption = $('select[name="product_id"]').find('option:selected');
+    const productPrice = selectedOption.data('price') || 25.50; // Fallback to default
+    
+    formData.append('price', productPrice);
     formData.append('prediction_date', new Date().toISOString().split('T')[0]);
     
     // Show loading state

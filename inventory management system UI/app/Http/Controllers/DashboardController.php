@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Purchase;
+use App\Models\Sale;
+use App\Models\Customer;
+use App\Models\Supplier;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -12,80 +19,130 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Dashboard data - Replace with actual database queries when models are created
-        $totalProducts = 125; // Example data
-        $totalCustomers = 89; // Example data
-        $totalSuppliers = 34; // Example data
+        // Get actual data from database
+        $totalProducts = Product::count();
+        $totalCustomers = Customer::count();
+        $totalSuppliers = Supplier::count();
         
-        // Today's metrics - Replace with actual queries
-        $todayRevenue = 2540.50; // Example data
-        $todaySalesCount = 18; // Example data
+        // Today's metrics - based on actual sales data
+        $today = Carbon::today();
+        $todayRevenue = Sale::whereDate('sale_date', $today)->sum('total_amount');
+        $todaySalesCount = Sale::whereDate('sale_date', $today)->count();
         
-        // Low stock count - Required for dashboard view
-        $lowStockCount = 8; // Example data - items with quantity below threshold
+        // Low stock products - items below minimum stock level
+        $lowStockProducts = Product::where('stock_quantity', '<=', DB::raw('minimum_stock_level'))
+            ->where('minimum_stock_level', '>', 0)
+            ->get(['name', 'stock_quantity', 'category', 'minimum_stock_level']);
+        
+        $lowStockCount = $lowStockProducts->count();
         
         // Pending users count for admin
         $pendingUsersCount = User::where('status', 'pending')->count();
         
-        // Low stock products - Replace with actual collection when models are ready
-        $lowStockProducts = collect([
-            (object)['name' => 'Widget A', 'quantity' => 5, 'category' => 'Electronics'],
-            (object)['name' => 'Widget B', 'quantity' => 2, 'category' => 'Tools'],
-            (object)['name' => 'Widget C', 'quantity' => 8, 'category' => 'Supplies']
-        ]);
+        // Recent sales - actual data from database
+        $recentSales = Sale::with(['customer', 'saleItems.product'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function ($sale) {
+                return (object)[
+                    'id' => $sale->id,
+                    'product' => (object)['name' => $sale->saleItems->first()?->product?->name ?? 'Multiple Items'],
+                    'customer' => (object)['name' => $sale->customer?->name ?? 'Walk-in Customer'],
+                    'total_amount' => $sale->total_amount,
+                    'created_at' => $sale->created_at
+                ];
+            });
         
-        // Recent sales - Replace with actual data
-        $recentSales = collect([
-            (object)[
-                'id' => 1,
-                'product' => (object)['name' => 'Widget A'],
-                'customer' => (object)['name' => 'John Doe'],
-                'total_amount' => 125.50,
-                'created_at' => now()->subHours(2)
-            ],
-            (object)[
-                'id' => 2,
-                'product' => (object)['name' => 'Widget B'],
-                'customer' => (object)['name' => 'Jane Smith'],
-                'total_amount' => 89.25,
-                'created_at' => now()->subHours(5)
-            ],
-            (object)[
-                'id' => 3,
-                'product' => (object)['name' => 'Widget C'],
-                'customer' => (object)['name' => 'Bob Johnson'],
-                'total_amount' => 156.75,
-                'created_at' => now()->subDays(1)
-            ]
-        ]);
+        // Recent purchases - actual data from database
+        $recentPurchases = Purchase::with(['supplier', 'purchaseItems.product'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function ($purchase) {
+                return (object)[
+                    'id' => $purchase->id,
+                    'product' => (object)['name' => $purchase->purchaseItems->first()?->product?->name ?? 'Multiple Items'],
+                    'supplier' => (object)['name' => $purchase->supplier?->name ?? 'Unknown Supplier'],
+                    'total_cost' => $purchase->total_amount,
+                    'created_at' => $purchase->created_at
+                ];
+            });
         
-        // Recent purchases - Replace with actual data
-        $recentPurchases = collect([
-            (object)[
-                'id' => 1,
-                'product' => (object)['name' => 'Raw Material A'],
-                'supplier' => (object)['name' => 'Supplier Inc.'],
-                'total_cost' => 450.00,
-                'created_at' => now()->subDays(1)
-            ],
-            (object)[
-                'id' => 2,
-                'product' => (object)['name' => 'Raw Material B'],
-                'supplier' => (object)['name' => 'Supply Corp.'],
-                'total_cost' => 320.75,
-                'created_at' => now()->subDays(2)
-            ]
-        ]);
+        // Monthly revenue data for chart - last 6 months
+        $monthlyRevenue = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthStart = $date->copy()->startOfMonth();
+            $monthEnd = $date->copy()->endOfMonth();
+            
+            $revenue = Sale::whereBetween('sale_date', [$monthStart, $monthEnd])
+                ->sum('total_amount');
+            
+            $monthlyRevenue[] = [
+                'month' => $date->format('M'),
+                'revenue' => (float) $revenue
+            ];
+        }
+
+        // Additional comprehensive stats
+        $totalSales = Sale::sum('total_amount');
+        $totalPurchases = Purchase::sum('total_amount');
+        $totalProfit = $totalSales - $totalPurchases;
         
-        // Monthly revenue data for chart
-        $monthlyRevenue = [
-            ['month' => 'Jan', 'revenue' => 12500],
-            ['month' => 'Feb', 'revenue' => 15200],
-            ['month' => 'Mar', 'revenue' => 18900],
-            ['month' => 'Apr', 'revenue' => 16700],
-            ['month' => 'May', 'revenue' => 21300],
-            ['month' => 'Jun', 'revenue' => 19800]
+        // Top selling products
+        $topProducts = Product::withSum('saleItems', 'quantity')
+            ->withSum('saleItems', 'total_price')
+            ->orderBy('sale_items_sum_total_price', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function($product) {
+                return [
+                    'name' => $product->name,
+                    'category' => $product->category,
+                    'quantity_sold' => $product->sale_items_sum_quantity ?? 0,
+                    'revenue' => $product->sale_items_sum_total_price ?? 0,
+                    'stock' => $product->stock_quantity
+                ];
+            });
+
+        // Recent customers
+        $recentCustomers = Customer::orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function($customer) {
+                $totalSpent = Sale::where('customer_id', $customer->id)->sum('total_amount');
+                $lastPurchase = Sale::where('customer_id', $customer->id)->latest()->first();
+                
+                return [
+                    'id' => $customer->id,
+                    'name' => $customer->name,
+                    'email' => $customer->email,
+                    'phone' => $customer->phone,
+                    'total_spent' => $totalSpent,
+                    'last_purchase' => $lastPurchase?->created_at,
+                    'orders_count' => Sale::where('customer_id', $customer->id)->count()
+                ];
+            });
+
+        // Inventory overview
+        $inventoryStats = [
+            'total_value' => Product::selectRaw('SUM(price * stock_quantity) as total')->value('total') ?? 0,
+            'low_stock_count' => $lowStockCount,
+            'out_of_stock' => Product::where('stock_quantity', 0)->count(),
+            'categories_count' => Product::distinct('category')->count('category')
         ];
+
+        // Sales trends (last 7 days)
+        $salesTrend = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $dailySales = Sale::whereDate('sale_date', $date)->sum('total_amount');
+            $salesTrend[] = [
+                'date' => $date->format('M j'),
+                'sales' => (float) $dailySales
+            ];
+        }
         
         return view('dashboard', compact(
             'totalProducts',
@@ -98,7 +155,14 @@ class DashboardController extends Controller
             'recentSales',
             'recentPurchases',
             'monthlyRevenue',
-            'pendingUsersCount'
+            'pendingUsersCount',
+            'totalSales',
+            'totalPurchases',
+            'totalProfit',
+            'topProducts',
+            'recentCustomers',
+            'inventoryStats',
+            'salesTrend'
         ));
     }
     

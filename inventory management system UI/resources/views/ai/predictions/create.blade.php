@@ -13,7 +13,7 @@
             <p class="page-subtitle">Generate intelligent inventory forecasts with machine learning</p>
         </div>
         <div class="col-md-4 text-end">
-            <a href="{{ route('ai.predictions.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('ai.predictions.index') }}" class="btn btn-outline-secondary" style="color: #6c757d; border-color: #6c757d;">
                 <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
             </a>
         </div>
@@ -105,7 +105,7 @@
                     <!-- Advanced Options (Collapsible) -->
                     <div class="form-group">
                         <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="collapse" 
-                                data-bs-target="#advanced-options">
+                                data-bs-target="#advanced-options" style="color: #0dcaf0; border-color: #0dcaf0;">
                             <i class="fas fa-sliders-h me-2"></i>Advanced Options
                         </button>
                     </div>
@@ -171,7 +171,7 @@
                         <button type="submit" class="btn btn-primary btn-lg" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                             <i class="fas fa-magic me-2"></i>Generate AI Prediction
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-lg ms-2" onclick="resetForm()">
+                        <button type="button" class="btn btn-outline-secondary btn-lg ms-2" onclick="resetForm()" style="color: #6c757d; border-color: #6c757d;">
                             <i class="fas fa-undo me-2"></i>Reset Form
                         </button>
                     </div>
@@ -257,7 +257,7 @@
                     <div class="badge bg-success me-2">HIGH</div>
                     <small>Product C - 203.8 units</small>
                 </div>
-                <a href="{{ route('ai.predictions.index') }}" class="btn btn-outline-primary btn-sm w-100 mt-2">
+                <a href="{{ route('ai.predictions.index') }}" class="btn btn-outline-primary btn-sm w-100 mt-2" style="color: #0d6efd; border-color: #0d6efd;">
                     View All Predictions
                 </a>
             </div>

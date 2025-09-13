@@ -235,7 +235,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; color: white;">
                                 <i class="fas fa-filter me-2"></i> Apply Filters
                             </button>
                         </div>

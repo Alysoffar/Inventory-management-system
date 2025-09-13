@@ -169,10 +169,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function addProductRow() {
         const clone = template.content.cloneNode(true);
         
-        // Replace __INDEX__ with actual index
-        clone.innerHTML = clone.innerHTML.replace(/__INDEX__/g, productIndex);
+        // Create a temporary div to manipulate innerHTML
+        const tempDiv = document.createElement('div');
+        tempDiv.appendChild(clone);
         
-        productList.appendChild(clone);
+        // Replace __INDEX__ with actual index
+        tempDiv.innerHTML = tempDiv.innerHTML.replace(/__INDEX__/g, productIndex);
+        
+        // Move the modified content to productList
+        while (tempDiv.firstChild) {
+            productList.appendChild(tempDiv.firstChild);
+        }
         
         // Add event listeners to the new row
         const newRow = productList.lastElementChild;

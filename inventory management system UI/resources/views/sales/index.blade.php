@@ -275,6 +275,7 @@
                         <tr>
                             <th>Sale ID</th>
                             <th>Customer</th>
+                            <th>Products</th>
                             <th>Date</th>
                             <th>Total Amount</th>
                             <th>Status</th>
@@ -296,6 +297,23 @@
                                 </div>
                             </td>
                             <td>
+                                @if($sale->saleItems && $sale->saleItems->count() > 0)
+                                    <div class="small">
+                                        @foreach($sale->saleItems->take(2) as $item)
+                                            <div class="mb-1">
+                                                <strong>{{ $item->product->name ?? 'Unknown Product' }}</strong>
+                                                <span class="text-muted">({{ $item->quantity }}x)</span>
+                                            </div>
+                                        @endforeach
+                                        @if($sale->saleItems->count() > 2)
+                                            <small class="text-muted">+{{ $sale->saleItems->count() - 2 }} more...</small>
+                                        @endif
+                                    </div>
+                                @else
+                                    <small class="text-muted">No items</small>
+                                @endif
+                            </td>
+                            <td>
                                 {{ $sale->created_at ? $sale->created_at->format('M d, Y') : 'N/A' }}
                                 <br><small class="text-muted">{{ $sale->created_at ? $sale->created_at->format('h:i A') : '' }}</small>
                             </td>
@@ -308,22 +326,27 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('sales.show', $sale->id ?? 1) }}">
-                                            <i class="fas fa-eye me-2"></i> View
-                                        </a></li>
-                                        <li><a class="dropdown-item" href="{{ route('sales.edit', $sale->id ?? 1) }}">
-                                            <i class="fas fa-edit me-2"></i> Edit
-                                        </a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $sale->id ?? 1 }})">
-                                            <i class="fas fa-trash me-2"></i> Delete
-                                        </a></li>
-                                    </ul>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('sales.edit', $sale->id ?? 1) }}" class="btn btn-outline-primary btn-sm" title="Edit Sale" style="color: #0d6efd; border-color: #0d6efd;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('sales.show', $sale->id ?? 1) }}">
+                                                <i class="fas fa-eye me-2"></i> View
+                                            </a></li>
+                                            <li><a class="dropdown-item" href="{{ route('sales.edit', $sale->id ?? 1) }}">
+                                                <i class="fas fa-edit me-2"></i> Edit
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $sale->id ?? 1 }})">
+                                                <i class="fas fa-trash me-2"></i> Delete
+                                            </a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

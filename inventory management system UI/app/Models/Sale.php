@@ -26,9 +26,13 @@ class Sale extends Model
         return $this->belongsTo(Customer::class);
     }
     
-    // If you have sale items, uncomment this:
-    // public function saleItems()
-    // {
-    //     return $this->hasMany(SaleItem::class);
-    // }
+    public function saleItems()
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, SaleItem::class, 'sale_id', 'id', 'id', 'product_id');
+    }
 }

@@ -13,7 +13,7 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         // Build the query with relationships
-        $query = Sale::with(['customer']);
+        $query = Sale::with(['customer', 'saleItems.product']);
         
         // Apply filters
         if ($request->filled('date_from')) {
@@ -65,38 +65,70 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request for multiple products
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
             'customer_id' => 'required|exists:customers,id',
-            'quantity' => 'required|integer|min:1',
-            'sale_date' => 'required|date'
+            'sale_date' => 'required|date',
+            'notes' => 'nullable|string',
+            'products' => 'required|array|min:1',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
+            'products.*.unit_price' => 'required|numeric|min:0',
         ]);
 
-        $product = Product::findOrFail($validated['product_id']);
-        if ($product->quantity < $validated['quantity']) {
-            return redirect()->back()->withInput()->with('error', 'Insufficient stock. Available: ' . $product->quantity);
-        }
+        // Start transaction for data integrity
+        DB::transaction(function () use ($validated) {
+            $totalAmount = 0;
+            $saleProducts = [];
 
-        DB::transaction(function () use ($validated, $product) {
-            $unitPrice = $product->price;
-            $totalAmount = $unitPrice * $validated['quantity'];
-            Sale::create([
-                'product_id' => $validated['product_id'],
+            // First, validate stock availability for all products
+            foreach ($validated['products'] as $productData) {
+                $product = Product::findOrFail($productData['product_id']);
+                if ($product->stock_quantity < $productData['quantity']) {
+                    throw new \Exception("Insufficient stock for {$product->name}. Available: {$product->stock_quantity}, Requested: {$productData['quantity']}");
+                }
+                
+                $itemTotal = $productData['quantity'] * $productData['unit_price'];
+                $totalAmount += $itemTotal;
+                
+                $saleProducts[] = [
+                    'product' => $product,
+                    'quantity' => $productData['quantity'],
+                    'unit_price' => $productData['unit_price'],
+                    'total' => $itemTotal
+                ];
+            }
+
+            // Create the main sale record
+            $sale = Sale::create([
                 'customer_id' => $validated['customer_id'],
-                'quantity' => $validated['quantity'],
-                'unit_price' => $unitPrice,
+                'sale_date' => $validated['sale_date'],
                 'total_amount' => $totalAmount,
-                'sale_date' => $validated['sale_date']
+                'status' => 'completed',
             ]);
-            $product->decrement('quantity', $validated['quantity']);
+
+            // Create sale items and update product stock
+            foreach ($saleProducts as $saleProduct) {
+                // Create sale item
+                \App\Models\SaleItem::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $saleProduct['product']->id,
+                    'quantity' => $saleProduct['quantity'],
+                    'unit_price' => $saleProduct['unit_price'],
+                    'total_price' => $saleProduct['total'],
+                ]);
+
+                // Update product stock
+                $saleProduct['product']->decrement('stock_quantity', $saleProduct['quantity']);
+            }
         });
 
-        return redirect()->route('sales.index')->with('success', 'Sale recorded successfully!');
+        return redirect()->route('sales.index')->with('success', 'Sales transaction recorded successfully!');
     }
 
     public function show(Sale $sale)
     {
-        $sale->load(['product', 'customer']);
+        $sale->load(['saleItems.product', 'customer']);
         return view('sales.show', compact('sale'));
     }
 
@@ -104,39 +136,74 @@ class SaleController extends Controller
     {
         $products = Product::all();
         $customers = Customer::all();
-        $sale->load(['product', 'customer']);
+        $sale->load(['saleItems.product', 'customer']);
         return view('sales.edit', compact('sale', 'products', 'customers'));
     }
 
     public function update(Request $request, Sale $sale)
     {
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
             'customer_id' => 'required|exists:customers,id',
-            'quantity' => 'required|integer|min:1',
-            'sale_date' => 'required|date'
+            'sale_date' => 'required|date',
+            'products' => 'required|array|min:1',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
+            'products.*.unit_price' => 'required|numeric|min:0',
+            'notes' => 'nullable|string|max:1000'
         ]);
 
-        $product = Product::findOrFail($validated['product_id']);
-        $oldProduct = $sale->product;
-        $oldQuantity = $sale->quantity;
-
-        DB::transaction(function () use ($validated, $product, $oldProduct, $oldQuantity, $sale) {
-            $oldProduct->increment('quantity', $oldQuantity);
-            if ($product->quantity < $validated['quantity']) {
-                throw new \Exception('Insufficient stock. Available: ' . $product->quantity);
+        DB::transaction(function () use ($validated, $sale) {
+            // First, restore stock from original sale items
+            foreach ($sale->saleItems as $oldItem) {
+                $oldItem->product->increment('stock_quantity', $oldItem->quantity);
             }
-            $unitPrice = $product->price;
-            $totalAmount = $unitPrice * $validated['quantity'];
+            
+            // Delete old sale items
+            $sale->saleItems()->delete();
+
+            $totalAmount = 0;
+            $saleProducts = [];
+
+            // Validate stock availability for all new products
+            foreach ($validated['products'] as $productData) {
+                $product = Product::findOrFail($productData['product_id']);
+                if ($product->stock_quantity < $productData['quantity']) {
+                    throw new \Exception("Insufficient stock for {$product->name}. Available: {$product->stock_quantity}, Requested: {$productData['quantity']}");
+                }
+                
+                $itemTotal = $productData['quantity'] * $productData['unit_price'];
+                $totalAmount += $itemTotal;
+                
+                $saleProducts[] = [
+                    'product' => $product,
+                    'quantity' => $productData['quantity'],
+                    'unit_price' => $productData['unit_price'],
+                    'total' => $itemTotal
+                ];
+            }
+
+            // Update the main sale record
             $sale->update([
-                'product_id' => $validated['product_id'],
                 'customer_id' => $validated['customer_id'],
-                'quantity' => $validated['quantity'],
-                'unit_price' => $unitPrice,
+                'sale_date' => $validated['sale_date'],
                 'total_amount' => $totalAmount,
-                'sale_date' => $validated['sale_date']
+                'notes' => $validated['notes'] ?? null,
             ]);
-            $product->decrement('quantity', $validated['quantity']);
+
+            // Create new sale items and update product stock
+            foreach ($saleProducts as $saleProduct) {
+                // Create sale item
+                \App\Models\SaleItem::create([
+                    'sale_id' => $sale->id,
+                    'product_id' => $saleProduct['product']->id,
+                    'quantity' => $saleProduct['quantity'],
+                    'unit_price' => $saleProduct['unit_price'],
+                    'total_price' => $saleProduct['total'],
+                ]);
+
+                // Update product stock
+                $saleProduct['product']->decrement('stock_quantity', $saleProduct['quantity']);
+            }
         });
 
         return redirect()->route('sales.index')->with('success', 'Sale updated successfully!');
@@ -145,7 +212,15 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         DB::transaction(function () use ($sale) {
-            $sale->product->increment('quantity', $sale->quantity);
+            // Restore stock for all sale items
+            foreach ($sale->saleItems as $item) {
+                $item->product->increment('stock_quantity', $item->quantity);
+            }
+            
+            // Delete sale items first
+            $sale->saleItems()->delete();
+            
+            // Delete the sale
             $sale->delete();
         });
 
@@ -157,7 +232,7 @@ class SaleController extends Controller
         $product = Product::find($productId);
         return response()->json([
             'price' => $product ? $product->price : 0,
-            'available_quantity' => $product ? $product->quantity : 0
+            'available_quantity' => $product ? $product->stock_quantity : 0
         ]);
     }
 }

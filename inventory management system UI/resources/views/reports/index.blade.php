@@ -228,10 +228,10 @@
                         <a href="{{ route('reports.sales') }}" class="btn btn-primary">
                             <i class="ri-bar-chart-box-line me-2"></i> Sales Report
                         </a>
-                        <a href="#" class="btn btn-outline-primary">
+                        <a href="{{ route('reports.monthly-sales') }}" class="btn btn-outline-primary">
                             <i class="ri-calendar-line me-2"></i> Monthly Sales
                         </a>
-                        <a href="#" class="btn btn-outline-primary">
+                        <a href="{{ route('reports.customer-analysis') }}" class="btn btn-outline-primary">
                             <i class="ri-user-line me-2"></i> Customer Analysis
                         </a>
                     </div>
@@ -252,10 +252,10 @@
                         <a href="{{ route('reports.inventory') }}" class="btn btn-success">
                             <i class="ri-archive-line me-2"></i> Inventory Report
                         </a>
-                        <a href="#" class="btn btn-outline-success">
+                        <a href="{{ route('reports.low-stock-alert') }}" class="btn btn-outline-success">
                             <i class="ri-alert-line me-2"></i> Low Stock Alert
                         </a>
-                        <a href="#" class="btn btn-outline-success">
+                        <a href="{{ route('reports.stock-valuation') }}" class="btn btn-outline-success">
                             <i class="ri-money-dollar-circle-line me-2"></i> Stock Valuation
                         </a>
                     </div>
@@ -276,10 +276,10 @@
                         <a href="{{ route('reports.profit-loss') }}" class="btn btn-info">
                             <i class="ri-pie-chart-line me-2"></i> Profit & Loss
                         </a>
-                        <a href="#" class="btn btn-outline-info">
+                        <a href="{{ route('reports.purchase-analysis') }}" class="btn btn-outline-info">
                             <i class="ri-shopping-bag-line me-2"></i> Purchase Analysis
                         </a>
-                        <a href="#" class="btn btn-outline-info">
+                        <a href="{{ route('reports.cost-analysis') }}" class="btn btn-outline-info">
                             <i class="ri-calculator-line me-2"></i> Cost Analysis
                         </a>
                     </div>
@@ -327,6 +327,13 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-soft-danger" onclick="generateAIExport()">
+                                    <i class="ri-file-pdf-line me-2"></i> AI Export
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -337,13 +344,80 @@
 @push('scripts')
 <script>
 function generateReport(type) {
-    // Placeholder for report generation
-    alert('Generating ' + type + ' report... This feature will be implemented soon.');
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="ri-loader-4-line me-2 spinner-border spinner-border-sm"></i> Generating PDF...';
+    button.disabled = true;
+    
+    // Determine the export URL based on type
+    let exportUrl = '';
+    switch(type) {
+        case 'sales':
+            exportUrl = '{{ route("reports.export.sales-pdf") }}';
+            break;
+        case 'inventory':
+            exportUrl = '{{ route("reports.export.inventory-pdf") }}';
+            break;
+        case 'customers':
+            exportUrl = '{{ route("reports.export.customers-pdf") }}';
+            break;
+        default:
+            alert('Export type not supported: ' + type);
+            button.innerHTML = originalText;
+            button.disabled = false;
+            return;
+    }
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = exportUrl;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Reset button after a delay
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 2000);
 }
 
 function scheduleReport() {
     // Placeholder for report scheduling
     alert('Report scheduling feature will be implemented soon.');
+}
+
+function generateAIExport() {
+    // Show loading state
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="ri-loader-4-line me-2 spinner-border spinner-border-sm"></i> Generating PDF...';
+    button.disabled = true;
+    
+    // Create a form to submit to the AI export route
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("reports.ai-export") }}';
+    form.style.display = 'none';
+    
+    // Add CSRF token
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = '{{ csrf_token() }}';
+    form.appendChild(csrfInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Reset button after a delay
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+        document.body.removeChild(form);
+    }, 2000);
 }
 </script>
 @endpush

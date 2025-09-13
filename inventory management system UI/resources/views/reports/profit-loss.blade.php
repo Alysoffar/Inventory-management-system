@@ -40,7 +40,7 @@
                         <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $endDate }}">
                     </div>
                     <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; color: white;">
                             <i class="fas fa-filter me-2"></i>Apply Filter
                         </button>
                     </div>
@@ -294,7 +294,26 @@ const profitTrendChart = new Chart(ctx, {
 });
 
 function exportToPDF() {
-    alert('PDF export functionality would be implemented here');
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    
+    // Update button state
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating PDF...';
+    button.disabled = true;
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = '{{ route("reports.export.profit-loss-pdf") }}';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Reset button after a delay
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 2000);
 }
 
 function refreshData() {

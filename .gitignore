@@ -1,32 +1,41 @@
 # ===================================
 # AI-POWERED INVENTORY MANAGEMENT SYSTEM
 # ===================================
-# Optimized .gitignore for easy pull-and-run setup
+# Optimized .gitignore for production-ready deployment
 
 # ===================================
-# ENVIRONMENT & SECRETS
+# ENVIRONMENT & SECRETS (CRITICAL)
 # ===================================
 .env
-.env.*
+.env.local
+.env.production
+.env.testing
 !.env.example
 
 # ===================================
-# DEPENDENCIES (Regeneratable)
+# DEPENDENCIES (Auto-installable)
 # ===================================
-# Python
-.venv/
-venv/
-__pycache__/
-*.py[cod]
-*.egg-info/
-
 # Laravel PHP
 vendor/
 */vendor/
+composer.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+*.pyd
+.venv/
+venv/
+env/
+.env/
 
 # Node.js
 node_modules/
 */node_modules/
+package-lock.json
+yarn.lock
 
 # ===================================
 # GENERATED/CACHE FILES
@@ -36,18 +45,68 @@ storage/app/public/
 storage/framework/cache/
 storage/framework/sessions/
 storage/framework/views/
-storage/logs/
-bootstrap/cache/
+storage/logs/*.log
+bootstrap/cache/*.php
 public/hot
 public/storage
 
-# Python
-*.pyc
-*.pyo
-*.pyd
+# ===================================
+# DATABASE (Keep structure, exclude data)
+# ===================================
+*.sqlite
+*.db
+database/database.sqlite
+*/database.sqlite
+*.sql.gz
 
 # ===================================
-# DEVELOPMENT TOOLS
+# DEVELOPMENT & BUILD ARTIFACTS
+# ===================================
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build outputs
+dist/
+build/
+public/mix-manifest.json
+
+# ===================================
+# AI MODEL ARTIFACTS (Large files)
+# ===================================
+*.h5
+*.pkl
+*.joblib
+*.model
+models/*.h5
+models/*.pkl
+*/models/*.h5
+*/models/*.pkl
+
+# ===================================
+# LOGS & TEMPORARY FILES
+# ===================================
+*.log
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# ===================================
+# DOCUMENTATION ARTIFACTS
+# ===================================
+docs/_build/
+*.pdf
+screenshots/
+diagnostic*images/
 # ===================================
 .DS_Store
 Thumbs.db

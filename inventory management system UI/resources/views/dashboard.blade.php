@@ -370,7 +370,7 @@ setTimeout(() => {
                                 <br>
                                 <small class="text-muted">{{ $product->category }}</small>
                             </div>
-                            <span class="badge bg-danger" style="font-size: 0.9rem;">{{ $product->quantity }}</span>
+                            <span class="badge bg-danger" style="font-size: 0.9rem;">{{ $product->stock_quantity }}</span>
                         </div>
                         @endforeach
                     </div>
@@ -386,7 +386,7 @@ setTimeout(() => {
 </div>
 
 <!-- Recent Activity Section -->
-<div class="row g-3">
+<div class="row g-3 mb-3">
     <!-- Recent Sales -->
     <div class="col-lg-6">
         <div class="card border-0 shadow-sm h-100">
@@ -418,7 +418,7 @@ setTimeout(() => {
                         </table>
                     </div>
                     <div class="text-center mt-2">
-                        <a href="{{ route('sales.index') }}" class="btn btn-primary btn-sm">View All</a>
+                        <a href="{{ route('sales.index') }}" class="btn btn-primary btn-sm">View All Sales</a>
                     </div>
                 @else
                     <p class="text-muted text-center">No recent sales found.</p>
@@ -430,39 +430,172 @@ setTimeout(() => {
     <!-- Recent Purchases -->
     <div class="col-lg-6">
         <div class="card border-0 shadow-sm h-100">
-            <div class="card-header py-3 px-4">
-                <h5 class="mb-0 fw-semibold"><i class="fas fa-shopping-bag me-2"></i>Recent Purchases</h5>
+            <div class="card-header py-2 px-3">
+                <h6 class="mb-0 fw-semibold"><i class="fas fa-shopping-bag me-2"></i>Recent Purchases</h6>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-3">
                 @if($recentPurchases->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th class="py-3">Product</th>
-                                    <th class="py-3">Supplier</th>
-                                    <th class="py-3">Cost</th>
-                                    <th class="py-3">Date</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Product</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Supplier</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Cost</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($recentPurchases as $purchase)
                                 <tr>
-                                    <td class="py-3">{{ $purchase->product->name }}</td>
-                                    <td class="py-3">{{ $purchase->supplier->name }}</td>
-                                    <td class="py-3">${{ number_format($purchase->total_cost, 2) }}</td>
-                                    <td class="py-3">{{ $purchase->created_at->format('M d') }}</td>
+                                    <td class="py-2" style="font-size: 1rem;">{{ $purchase->product->name }}</td>
+                                    <td class="py-2" style="font-size: 1rem;">{{ $purchase->supplier->name }}</td>
+                                    <td class="py-2" style="font-size: 1.1rem;">${{ number_format($purchase->total_cost, 2) }}</td>
+                                    <td class="py-2" style="font-size: 1rem;">{{ $purchase->created_at->format('M d') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="{{ route('purchases.index') }}" class="btn btn-primary">View All</a>
+                    <div class="text-center mt-2">
+                        <a href="{{ route('purchases.index') }}" class="btn btn-primary btn-sm">View All Purchases</a>
                     </div>
                 @else
                     <p class="text-muted text-center">No recent purchases found.</p>
                 @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Products & Recent Customers Section -->
+<div class="row g-3 mb-3">
+    <!-- Top Selling Products -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-2 px-3">
+                <h6 class="mb-0 fw-semibold"><i class="fas fa-trophy me-2"></i>Top Selling Products</h6>
+            </div>
+            <div class="card-body p-3">
+                @if($topProducts->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="py-2" style="font-size: 0.9rem;">Product</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Category</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Sold</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($topProducts as $product)
+                                <tr>
+                                    <td class="py-2"><strong style="font-size: 1rem;">{{ $product['name'] }}</strong></td>
+                                    <td class="py-2" style="font-size: 0.9rem;">{{ $product['category'] }}</td>
+                                    <td class="py-2" style="font-size: 1rem;">{{ $product['quantity_sold'] }}</td>
+                                    <td class="py-2" style="font-size: 1.1rem;">${{ number_format($product['revenue'], 0) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="{{ route('products.index') }}" class="btn btn-primary btn-sm">View All Products</a>
+                    </div>
+                @else
+                    <p class="text-muted text-center">No sales data available.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Customers -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header py-2 px-3">
+                <h6 class="mb-0 fw-semibold"><i class="fas fa-users me-2"></i>Recent Customers</h6>
+            </div>
+            <div class="card-body p-3">
+                @if($recentCustomers->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="py-2" style="font-size: 0.9rem;">Customer</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Orders</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Total Spent</th>
+                                    <th class="py-2" style="font-size: 0.9rem;">Last Order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentCustomers as $customer)
+                                <tr>
+                                    <td class="py-2">
+                                        <div>
+                                            <strong style="font-size: 1rem;">{{ $customer['name'] }}</strong>
+                                            <br><small class="text-muted">{{ $customer['email'] }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="py-2" style="font-size: 1rem;">{{ $customer['orders_count'] }}</td>
+                                    <td class="py-2" style="font-size: 1.1rem;">${{ number_format($customer['total_spent'], 0) }}</td>
+                                    <td class="py-2" style="font-size: 0.9rem;">
+                                        {{ $customer['last_purchase'] ? $customer['last_purchase']->format('M d') : 'Never' }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="{{ route('customers.index') }}" class="btn btn-primary btn-sm">View All Customers</a>
+                    </div>
+                @else
+                    <p class="text-muted text-center">No customers found.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Business Summary Section -->
+<div class="row g-3 mb-3">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header py-2 px-3">
+                <h6 class="mb-0 fw-semibold"><i class="fas fa-chart-bar me-2"></i>Business Summary</h6>
+            </div>
+            <div class="card-body p-3">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-success bg-opacity-10 rounded">
+                            <i class="fas fa-dollar-sign text-success fa-2x mb-2"></i>
+                            <h4 class="mb-1 text-success">${{ number_format($totalSales, 0) }}</h4>
+                            <p class="mb-0 text-muted">Total Sales</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-danger bg-opacity-10 rounded">
+                            <i class="fas fa-shopping-cart text-danger fa-2x mb-2"></i>
+                            <h4 class="mb-1 text-danger">${{ number_format($totalPurchases, 0) }}</h4>
+                            <p class="mb-0 text-muted">Total Purchases</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-primary bg-opacity-10 rounded">
+                            <i class="fas fa-chart-line text-primary fa-2x mb-2"></i>
+                            <h4 class="mb-1 text-primary">${{ number_format($totalProfit, 0) }}</h4>
+                            <p class="mb-0 text-muted">Total Profit</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3 bg-info bg-opacity-10 rounded">
+                            <i class="fas fa-boxes text-info fa-2x mb-2"></i>
+                            <h4 class="mb-1 text-info">${{ number_format($inventoryStats['total_value'], 0) }}</h4>
+                            <p class="mb-0 text-muted">Inventory Value</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

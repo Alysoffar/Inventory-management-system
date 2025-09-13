@@ -42,13 +42,17 @@ class AIPredictionController extends Controller
             'low' => 15
         ];
         
+        // Get all products for the quick prediction form
+        $products = Product::all();
+        
         return view('ai.predictions.index', compact(
             'recentPredictions', 
             'totalPredictions', 
             'averageAccuracy',
             'reorderRecommendations',
             'highRiskPredictions',
-            'riskStats'
+            'riskStats',
+            'products'
         ));
     }
     

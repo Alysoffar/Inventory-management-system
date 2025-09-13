@@ -14,13 +14,13 @@ class SaleItem extends Model
         'product_id',
         'quantity',
         'unit_price',
-        'total_amount'
+        'total_price'
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'unit_price' => 'decimal:2',
-        'total_amount' => 'decimal:2'
+        'total_price' => 'decimal:2'
     ];
 
     public function sale()

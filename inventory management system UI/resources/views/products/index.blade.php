@@ -317,15 +317,15 @@
                                 <strong>${{ number_format($product->price ?? 0, 2) }}</strong>
                             </td>
                             <td>
-                                <strong>{{ number_format($product->quantity ?? 0) }}</strong>
+                                <strong>{{ number_format($product->stock_quantity ?? 0) }}</strong>
                                 @if(isset($product->unit))
                                     <small class="text-muted">{{ $product->unit }}</small>
                                 @endif
                             </td>
                             <td>
                                 @php
-                                    $quantity = $product->quantity ?? 0;
-                                    $lowStockThreshold = $product->low_stock_threshold ?? 10;
+                                    $quantity = $product->stock_quantity ?? 0;
+                                    $lowStockThreshold = $product->minimum_stock_level ?? 10;
                                 @endphp
                                 @if($quantity <= 0)
                                     <span class="badge bg-danger">Out of Stock</span>
@@ -336,22 +336,27 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('products.show', $product->id ?? 1) }}">
-                                            <i class="fas fa-eye me-2"></i> View
-                                        </a></li>
-                                        <li><a class="dropdown-item" href="{{ route('products.edit', $product->id ?? 1) }}">
-                                            <i class="fas fa-edit me-2"></i> Edit
-                                        </a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $product->id ?? 1 }})">
-                                            <i class="fas fa-trash me-2"></i> Delete
-                                        </a></li>
-                                    </ul>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('products.edit', $product->id ?? 1) }}" class="btn btn-outline-primary btn-sm" title="Edit Product" style="color: #0d6efd; border-color: #0d6efd;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('products.show', $product->id ?? 1) }}">
+                                                <i class="fas fa-eye me-2"></i> View
+                                            </a></li>
+                                            <li><a class="dropdown-item" href="{{ route('products.edit', $product->id ?? 1) }}">
+                                                <i class="fas fa-edit me-2"></i> Edit
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $product->id ?? 1 }})">
+                                                <i class="fas fa-trash me-2"></i> Delete
+                                            </a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

@@ -1,162 +1,123 @@
 @extends('layouts.app')
 
-@section('title', 'Inventory Report')
+@section('title', 'Inventory Analytics Report')
 
 @section('content')
-<div class="container-fluid">
-    <!-- Page Header -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Inventory Report</h4>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Reports</a></li>
-                        <li class="breadcrumb-item active">Inventory Report</li>
-                    </ol>
-                </div>
+<!-- Page Header -->
+<div class="page-header section-spacing">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="page-title">
+                <i class="fas fa-boxes me-3"></i>Inventory Analytics Report
+            </h1>
+            <p class="page-subtitle">Comprehensive inventory analysis with real-time stock monitoring</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group">
+                <a href="{{ url('/reports/export/inventory-pdf') }}" target="_blank" class="btn btn-outline-primary">
+                    <i class="fas fa-file-pdf me-2"></i>Export PDF
+                </a>
+                <button class="btn btn-success" onclick="refreshData()">
+                    <i class="fas fa-sync me-2"></i>Refresh
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Report Controls -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h5 class="card-title mb-0">Report Filters</h5>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-primary" onclick="exportReport()">
-                                <i class="ri-download-line me-1"></i> Export Report
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <form method="GET" class="row g-3">
-                        <div class="col-md-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select class="form-select" id="category" name="category">
-                                <option value="">All Categories</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Tools">Tools</option>
-                                <option value="Supplies">Supplies</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="status" class="form-label">Stock Status</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="">All Items</option>
-                                <option value="in_stock">In Stock</option>
-                                <option value="low_stock">Low Stock</option>
-                                <option value="out_of_stock">Out of Stock</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="value_range" class="form-label">Value Range</label>
-                            <select class="form-select" id="value_range" name="value_range">
-                                <option value="">All Values</option>
-                                <option value="0-100">$0 - $100</option>
-                                <option value="100-500">$100 - $500</option>
-                                <option value="500+">$500+</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-outline-primary">
-                                    <i class="ri-search-line me-1"></i> Apply Filters
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+<!-- Summary Cards -->
+<div class="row section-spacing">
+    <div class="col-lg-3 col-md-6">
+        <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-archive fa-2x mb-3 text-primary"></i>
+                <h3 class="text-primary">{{ $totalProducts ?? 0 }}</h3>
+                <p class="mb-1">Total Products</p>
+                <small class="text-dark">In inventory</small>
             </div>
         </div>
     </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-dollar-sign fa-2x mb-3 text-success"></i>
+                <h3 class="text-success">${{ number_format($totalValue ?? 0, 2) }}</h3>
+                <p class="mb-1">Total Value</p>
+                <small class="text-dark">Current inventory value</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
+                <h3 class="text-warning">{{ $lowStockItems ?? 0 }}</h3>
+                <p class="mb-1">Low Stock Items</p>
+                <small class="text-dark">Need restocking</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="fas fa-times-circle fa-2x mb-3 text-danger"></i>
+                <h3 class="text-danger">{{ $outOfStockItems ?? 0 }}</h3>
+                <p class="mb-1">Out of Stock</p>
+                <small class="text-dark">Immediate attention</small>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Summary Cards -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Items</p>
-                            <h4 class="mb-2">{{ $totalItems ?? 125 }}</h4>
-                            <p class="text-muted mb-0">Across all categories</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-primary rounded-3">
-                                <i class="ri-archive-line font-size-24"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+<!-- Main Content -->
+<div class="row section-spacing">
+    <!-- Inventory Chart -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Stock Levels by Product
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="inventoryStockChart" height="300"></canvas>
             </div>
         </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Total Value</p>
-                            <h4 class="mb-2">${{ number_format($totalValue ?? 45780.50, 2) }}</h4>
-                            <p class="text-muted mb-0">Current inventory value</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-success rounded-3">
-                                <i class="ri-money-dollar-circle-line font-size-24"></i>
-                            </span>
-                        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Inventory Insights
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="insight-item mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Turnover Rate</span>
+                        <strong class="text-success">6.4x</strong>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Low Stock Items</p>
-                            <h4 class="mb-2 text-warning">{{ $lowStockItems ?? 8 }}</h4>
-                            <p class="text-muted mb-0">Need restocking</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-warning rounded-3">
-                                <i class="ri-error-warning-line font-size-24"></i>
-                            </span>
-                        </div>
+                <div class="insight-item mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Stock Accuracy</span>
+                        <strong class="text-info">96.8%</strong>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="flex-grow-1">
-                            <p class="text-truncate font-size-14 mb-2">Out of Stock</p>
-                            <h4 class="mb-2 text-danger">{{ $outOfStockItems ?? 3 }}</h4>
-                            <p class="text-muted mb-0">Immediate attention</p>
-                        </div>
-                        <div class="avatar-sm">
-                            <span class="avatar-title bg-light text-danger rounded-3">
-                                <i class="ri-alert-line font-size-24"></i>
-                            </span>
-                        </div>
+                <div class="insight-item">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Reorder Point</span>
+                        <strong class="text-warning">{{ $lowStockItems ?? 0 }} Items</strong>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Inventory Table -->
     <div class="row">
@@ -182,8 +143,8 @@
                             </thead>
                             <tbody>
                                 @php
-                                    // Sample inventory data - replace with actual data from controller
-                                    $inventoryItems = [
+                                    // If no products are passed from controller, use sample data
+                                    $inventoryItems = $products ?? [
                                         (object)[
                                             'id' => 1,
                                             'name' => 'Widget A',
@@ -232,35 +193,35 @@
                                     ];
                                 @endphp
 
-                                @forelse($inventoryItems as $item)
+                                @forelse($inventoryData['products'] as $item)
                                 <tr>
                                     <td>
                                         <div>
-                                            <strong>{{ $item->name }}</strong>
+                                            <strong>{{ $item['name'] }}</strong>
                                         </div>
                                     </td>
                                     <td>
-                                        <code>{{ $item->sku }}</code>
+                                        <code>{{ $item['sku'] }}</code>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-dark">{{ $item->category }}</span>
+                                        <span class="badge bg-light text-dark">{{ $item['category'] }}</span>
                                     </td>
                                     <td>
-                                        <strong class="{{ $item->stock_quantity <= 10 ? 'text-warning' : 'text-success' }}">
-                                            {{ $item->stock_quantity }}
+                                        <strong class="{{ $item['stock_quantity'] <= 10 ? 'text-warning' : 'text-success' }}">
+                                            {{ $item['stock_quantity'] }}
                                         </strong>
                                     </td>
                                     <td>
-                                        ${{ number_format($item->price, 2) }}
+                                        ${{ number_format($item['cost_price'], 2) }}
                                     </td>
                                     <td>
-                                        <strong>${{ number_format($item->price * $item->stock_quantity, 2) }}</strong>
+                                        <strong>${{ number_format($item['total_value'], 2) }}</strong>
                                     </td>
                                     <td>
-                                        @if($item->stock_quantity == 0)
+                                        @if($item['stock_quantity'] == 0)
                                             <span class="badge bg-danger">Out of Stock</span>
-                                        @elseif($item->stock_quantity <= 10)
-                                            <span class="badge bg-warning">Low Stock</span>
+                                        @elseif($item['stock_quantity'] <= $item['minimum_stock_level'])
+                                            <span class="badge bg-warning text-dark">Low Stock</span>
                                         @else
                                             <span class="badge bg-success">In Stock</span>
                                         @endif
@@ -271,14 +232,14 @@
                                                 Actions
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="{{ route('products.show', $item->id) }}">
+                                                <li><a class="dropdown-item" href="{{ route('products.show', $item['id']) }}">
                                                     <i class="ri-eye-line me-2"></i> View Details
                                                 </a></li>
-                                                <li><a class="dropdown-item" href="{{ route('products.edit', $item->id) }}">
+                                                <li><a class="dropdown-item" href="{{ route('products.edit', $item['id']) }}">
                                                     <i class="ri-edit-line me-2"></i> Edit Product
                                                 </a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="#" onclick="adjustStock({{ $item->id }})">
+                                                <li><a class="dropdown-item" href="#" onclick="adjustStock({{ $item['id'] }}, '{{ addslashes($item['name']) }}', {{ $item['stock_quantity'] }})">
                                                     <i class="ri-add-circle-line me-2"></i> Adjust Stock
                                                 </a></li>
                                             </ul>
@@ -305,17 +266,298 @@
     </div>
 </div>
 
-@push('scripts')
+<!-- Stock Adjustment Modal -->
+<div class="modal fade" id="adjustStockModal" tabindex="-1" aria-labelledby="adjustStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adjustStockModalLabel">
+                    <i class="fas fa-box me-2"></i>Adjust Stock
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="stockProductId">
+                
+                <div class="mb-3">
+                    <label class="form-label"><strong>Product:</strong></label>
+                    <div id="stockProductName" class="text-muted"></div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label"><strong>Current Stock:</strong></label>
+                    <div id="stockCurrentQuantity" class="text-info fw-bold"></div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="adjustmentType" class="form-label">Adjustment Type</label>
+                    <select class="form-select" id="adjustmentType" required>
+                        <option value="increase">Increase Stock</option>
+                        <option value="decrease">Decrease Stock</option>
+                        <option value="set">Set Exact Quantity</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="adjustmentQuantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="adjustmentQuantity" min="1" required 
+                           placeholder="Enter quantity">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="adjustmentLocation" class="form-label">Location (Optional)</label>
+                    <input type="text" class="form-control" id="adjustmentLocation" 
+                           placeholder="Enter location">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="adjustmentNotes" class="form-label">Notes (Optional)</label>
+                    <textarea class="form-control" id="adjustmentNotes" rows="3" 
+                              placeholder="Enter reason for adjustment"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitStockAdjustment" onclick="submitStockAdjustment()">
+                    <i class="fas fa-save me-2"></i>Adjust Stock
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-function exportReport() {
-    // Placeholder for export functionality
-    alert('Export functionality will be implemented soon. This will generate a CSV/PDF report of the inventory data.');
+document.addEventListener('DOMContentLoaded', function() {
+    // Debug: Log all passed variables
+    console.log('=== INVENTORY DEBUG INFO ===');
+    console.log('totalProducts:', {{ $totalProducts ?? 0 }});
+    console.log('totalValue:', {{ $totalValue ?? 0 }});
+    console.log('lowStockItems:', {{ $lowStockItems ?? 0 }});
+    console.log('outOfStockItems:', {{ $outOfStockItems ?? 0 }});
+
+    // Prepare data for the inventory stock chart
+    const inventoryData = @json($inventoryData ?? ['products' => []]);
+    console.log('Raw inventory data:', inventoryData);
+
+    let inventoryLabels = [];
+    let inventoryStock = [];
+
+    if (inventoryData && inventoryData.products && inventoryData.products.length > 0) {
+        inventoryLabels = inventoryData.products.slice(0, 10).map(item => item.name || 'Unknown Product');
+        inventoryStock = inventoryData.products.slice(0, 10).map(item => parseInt(item.stock_quantity) || 0);
+    }
+
+    console.log('Final Labels:', inventoryLabels);
+    console.log('Final Stock:', inventoryStock);
+    console.log('=== END DEBUG INFO ===');
+
+    const ctx = document.getElementById('inventoryStockChart');
+    
+    if (!ctx) {
+        console.error('Chart canvas not found');
+        return;
+    }
+    
+    if (inventoryLabels.length > 0 && inventoryStock.length > 0) {
+        console.log('Creating chart with data:', { labels: inventoryLabels, data: inventoryStock });
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: inventoryLabels,
+                datasets: [{
+                    label: 'Stock Quantity',
+                    data: inventoryStock,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#C7C7C7', '#5382FF'
+                    ],
+                    borderColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#C7C7C7', '#5382FF'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+                                return `${label}: ${value} units (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        console.log('No inventory data available for chart - showing message');
+        
+        // Create a message in the chart container
+        const chartContainer = ctx.parentElement;
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'text-center p-4';
+        messageDiv.innerHTML = `
+            <i class="fas fa-chart-pie fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No inventory data available for chart</p>
+            <small class="text-muted">Add products to see the stock distribution</small>
+        `;
+        
+        // Hide the canvas and show the message
+        ctx.style.display = 'none';
+        chartContainer.appendChild(messageDiv);
+    }
+});
+
+function refreshData() {
+    location.reload();
 }
 
-function adjustStock(productId) {
-    // Placeholder for stock adjustment
-    alert('Stock adjustment functionality will be implemented soon. Product ID: ' + productId);
+function adjustStock(productId, productName, currentStock) {
+    console.log('adjustStock called with:', { productId, productName, currentStock });
+    
+    // Check if modal elements exist
+    const stockProductIdElement = document.getElementById('stockProductId');
+    const stockProductNameElement = document.getElementById('stockProductName');
+    const stockCurrentQuantityElement = document.getElementById('stockCurrentQuantity');
+    
+    if (!stockProductIdElement || !stockProductNameElement || !stockCurrentQuantityElement) {
+        console.error('Modal elements not found');
+        alert('Error: Modal elements not found. Please refresh the page and try again.');
+        return;
+    }
+    
+    // Set up the modal with product info
+    stockProductIdElement.value = productId;
+    stockProductNameElement.textContent = productName;
+    stockCurrentQuantityElement.textContent = currentStock + ' units';
+    
+    // Reset form
+    document.getElementById('adjustmentType').value = 'increase';
+    document.getElementById('adjustmentQuantity').value = '';
+    document.getElementById('adjustmentNotes').value = '';
+    document.getElementById('adjustmentLocation').value = '';
+    
+    // Show modal
+    try {
+        const modalElement = document.getElementById('adjustStockModal');
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log('Modal should be visible now');
+        } else {
+            console.error('Modal element not found');
+            alert('Error: Modal not found. Please refresh the page and try again.');
+        }
+    } catch (error) {
+        console.error('Error showing modal:', error);
+        alert('Error showing modal: ' + error.message);
+    }
+}
+
+function submitStockAdjustment() {
+    console.log('submitStockAdjustment called');
+    
+    const productId = document.getElementById('stockProductId').value;
+    const adjustmentType = document.getElementById('adjustmentType').value;
+    const quantity = document.getElementById('adjustmentQuantity').value;
+    const notes = document.getElementById('adjustmentNotes').value;
+    const location = document.getElementById('adjustmentLocation').value;
+    
+    console.log('Form data:', { productId, adjustmentType, quantity, notes, location });
+    
+    if (!quantity || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+    
+    // Check CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (!csrfToken) {
+        console.error('CSRF token not found');
+        alert('Error: Security token not found. Please refresh the page and try again.');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitStockAdjustment');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adjusting...';
+    submitBtn.disabled = true;
+    
+    console.log('Making API request to:', `/products/${productId}/adjust-stock`);
+    
+    // Submit the adjustment
+    fetch(`/products/${productId}/adjust-stock`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken.getAttribute('content')
+        },
+        body: JSON.stringify({
+            adjustment_type: adjustmentType,
+            quantity: parseInt(quantity),
+            notes: notes,
+            location: location
+        })
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        
+        if (data.success) {
+            // Close modal
+            const modalElement = document.getElementById('adjustStockModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+            
+            // Show success message
+            alert(`Stock adjusted successfully! Changed from ${data.old_quantity} to ${data.new_quantity} units.`);
+            
+            // Refresh the page to show updated data
+            location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to adjust stock'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network error occurred while adjusting stock: ' + error.message);
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
 }
 </script>
-@endpush
 @endsection

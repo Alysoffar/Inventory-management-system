@@ -190,20 +190,20 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('customers.show', $customer->id) }}" 
-                                       class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
                                     <a href="{{ route('customers.edit', $customer->id) }}" 
-                                       class="btn btn-sm btn-outline-warning">
+                                       class="btn btn-sm btn-outline-primary" title="Edit Customer" style="color: #0d6efd; border-color: #0d6efd;">
                                         <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ route('customers.show', $customer->id) }}" 
+                                       class="btn btn-sm btn-outline-secondary" style="color: #6c757d; border-color: #6c757d;">
+                                        <i class="fas fa-eye"></i>
                                     </a>
                                     <form method="POST" action="{{ route('customers.destroy', $customer->id) }}" 
                                           style="display: inline;" 
                                           onsubmit="return confirm('Are you sure?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" style="color: #dc3545; border-color: #dc3545;">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

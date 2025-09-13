@@ -256,7 +256,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; color: white;">
                                 <i class="fas fa-filter me-2"></i> Apply Filters
                             </button>
                         </div>
@@ -311,22 +311,27 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('purchases.show', $purchase->id ?? 1) }}">
-                                            <i class="fas fa-eye me-2"></i> View
-                                        </a></li>
-                                        <li><a class="dropdown-item" href="{{ route('purchases.edit', $purchase->id ?? 1) }}">
-                                            <i class="fas fa-edit me-2"></i> Edit
-                                        </a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $purchase->id ?? 1 }})">
-                                            <i class="fas fa-trash me-2"></i> Delete
-                                        </a></li>
-                                    </ul>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('purchases.edit', $purchase->id ?? 1) }}" class="btn btn-outline-primary btn-sm" title="Edit Purchase" style="color: #0d6efd; border-color: #0d6efd;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('purchases.show', $purchase->id ?? 1) }}">
+                                                <i class="fas fa-eye me-2"></i> View
+                                            </a></li>
+                                            <li><a class="dropdown-item" href="{{ route('purchases.edit', $purchase->id ?? 1) }}">
+                                                <i class="fas fa-edit me-2"></i> Edit
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ $purchase->id ?? 1 }})">
+                                                <i class="fas fa-trash me-2"></i> Delete
+                                            </a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

@@ -14,10 +14,10 @@
         </div>
         <div class="col-md-4 text-end">
             <div class="btn-group">
-                <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-primary">
+                <a href="{{ route('ai.predictions.create') }}" class="btn btn-outline-primary" style="color: #0d6efd; border-color: #0d6efd;">
                     <i class="fas fa-plus me-2"></i>New Prediction
                 </a>
-                <button class="btn btn-success" onclick="exportResults()">
+                <button class="btn btn-success" onclick="exportResults()" style="background-color: #198754; border-color: #198754; color: white;">
                     <i class="fas fa-download me-2"></i>Export
                 </button>
             </div>
@@ -262,14 +262,14 @@
                     <div class="col-md-4 text-end">
                         <div class="btn-group">
                             @if($prediction['inventory_status']['should_reorder'])
-                                <button class="btn btn-warning" onclick="createPurchaseOrder()">
+                                <button class="btn btn-warning" onclick="createPurchaseOrder()" style="background-color: #ffc107; border-color: #ffc107; color: #000;">
                                     <i class="fas fa-shopping-cart me-2"></i>Create Purchase Order
                                 </button>
                             @endif
-                            <button class="btn btn-primary" onclick="regeneratePrediction()">
+                            <button class="btn btn-primary" onclick="regeneratePrediction()" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
                                 <i class="fas fa-redo me-2"></i>Regenerate
                             </button>
-                            <button class="btn btn-success" onclick="exportResults()">
+                            <button class="btn btn-success" onclick="exportResults()" style="background-color: #198754; border-color: #198754; color: white;">
                                 <i class="fas fa-file-pdf me-2"></i>Export PDF
                             </button>
                         </div>
@@ -382,7 +382,26 @@ function createPurchaseOrder() {
 }
 
 function exportResults() {
-    alert('Export functionality will be implemented soon. This will generate a comprehensive PDF report.');
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    
+    // Update button state
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating PDF...';
+    button.disabled = true;
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = '{{ route("ai.predictions.export") }}';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Reset button after a delay
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 2000);
 }
 </script>
 @endsection

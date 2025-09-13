@@ -6,7 +6,20 @@
 <!-- Page Header -->
 <div class="page-header section-spacing">
     <h1 class="page-title">
-        <i class="fas fa-brain me-1"></i>AI Insights
+        <i class="                <div class="action-buttons">
+                    <a href="{{ route('ai.predictions.create') }}" class="btn btn-primary btn-sm" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
+                        <i class="fas fa-magic me-1"></i>New Prediction
+                    </a>
+                    <a href="{{ route('ai.predictions.index') }}" class="btn btn-info btn-sm" style="background-color: #0dcaf0; border-color: #0dcaf0; color: black;">
+                        <i class="fas fa-list me-1"></i>View All Predictions
+                    </a>
+                    <a href="{{ route('products.index') }}" class="btn btn-warning btn-sm" style="background-color: #ffc107; border-color: #ffc107; color: black;">
+                        <i class="fas fa-boxes me-1"></i>Manage Inventory
+                    </a>
+                    <a href="{{ route('reports.inventory') }}" class="btn btn-secondary btn-sm" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                        <i class="fas fa-file-alt me-1"></i>Generate Report
+                    </a>
+                </div>e-1"></i>AI Insights
     </h1>
     <p class="page-subtitle">Business Intelligence & Recommendations</p>
 </div>

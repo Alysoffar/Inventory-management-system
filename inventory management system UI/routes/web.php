@@ -101,8 +101,21 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/inventory', [ReportController::class, 'inventory'])->name('inventory');
         Route::get('/profit-loss', [ReportController::class, 'profitLoss'])->name('profit-loss');
         Route::get('/low-stock', [ReportController::class, 'lowStock'])->name('low-stock');
+        
+        // New report routes
+        Route::get('/monthly-sales', [ReportController::class, 'monthlySales'])->name('monthly-sales');
+        Route::get('/customer-analysis', [ReportController::class, 'customerAnalysis'])->name('customer-analysis');
+        Route::get('/low-stock-alert', [ReportController::class, 'lowStockAlert'])->name('low-stock-alert');
+        Route::get('/stock-valuation', [ReportController::class, 'stockValuation'])->name('stock-valuation');
+        Route::get('/purchase-analysis', [ReportController::class, 'purchaseAnalysis'])->name('purchase-analysis');
+        Route::get('/cost-analysis', [ReportController::class, 'costAnalysis'])->name('cost-analysis');
+        
+        // Export routes
         Route::get('/export/sales-pdf', [ReportController::class, 'exportSalesPdf'])->name('export.sales-pdf');
         Route::get('/export/inventory-pdf', [ReportController::class, 'exportInventoryPdf'])->name('export.inventory-pdf');
+        Route::get('/export/customers-pdf', [ReportController::class, 'exportCustomersPdf'])->name('export.customers-pdf');
+        Route::get('/export/profit-loss-pdf', [ReportController::class, 'exportProfitLossPdf'])->name('export.profit-loss-pdf');
+        Route::post('/ai-export', [ReportController::class, 'aiExport'])->name('ai-export');
     });
 
     // AI Prediction Routes
