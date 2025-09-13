@@ -223,7 +223,7 @@
                     <td>{{ $month['month'] }}</td>
                     <td class="amount">${{ number_format($month['sales'], 2) }}</td>
                     <td>{{ number_format($month['transactions']) }}</td>
-                    <td class="amount">${{ number_format($month['sales'] / $month['transactions'], 2) }}</td>
+                    <td class="amount">${{ $month['transactions'] > 0 ? number_format($month['sales'] / $month['transactions'], 2) : '0.00' }}</td>
                 </tr>
                 @endforeach
             </tbody>
